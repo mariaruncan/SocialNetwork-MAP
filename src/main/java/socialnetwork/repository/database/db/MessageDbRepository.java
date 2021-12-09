@@ -1,0 +1,211 @@
+package socialnetwork.repository.database.db;
+
+import socialnetwork.domain.Message;
+import socialnetwork.domain.User;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.sql.DriverManager.getConnection;
+
+public class MessageDbRepository implements  Repository<Long, Message> {
+    private String url;
+    private String username;
+    private String password;
+    Iterable<User> utilizatori;
+
+    public MessageDbRepository(String url, String username, String password, Repository<Long, User> repo) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.utilizatori = repo.findAll();
+    }
+
+
+    @Override
+    public int size() {
+        AtomicInteger n = new AtomicInteger();
+        Iterable<Message> users = findAll();
+        users.forEach(x -> {
+            n.getAndIncrement();
+        });
+        return n.get();
+    }
+
+    @Override
+    public boolean exists(Long aLong) {
+        if (findOne(aLong) != null)
+            return true;
+        else return false;
+    }
+
+    @Override
+    public void deleteAll(Iterable<Message> list) {
+        list.forEach(x -> delete(x.getId()));
+
+    }
+
+    @Override
+    public void saveAll(Iterable<Message> list) {
+        list.forEach(x -> save(x));
+    }
+
+    @Override
+    public Message findOne(Long idd) {
+        if (idd == null)
+            throw new IllegalArgumentException("id must be not null");
+        try (Connection connection = getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement("SELECT * from message WHERE id=?");
+             PreparedStatement statement1 = connection.prepareStatement("SELECT * from replyto WHERE id_msg=?")) {
+            statement.setLong(1, idd);
+            statement1.setLong(1, idd);
+            ResultSet resultSet = statement.executeQuery();
+            Message message = null;
+            while (resultSet.next()) {
+                Long Id = resultSet.getLong("id");
+                Long utilizator = resultSet.getLong("from");
+                String msg = resultSet.getString("message");
+                Date date = resultSet.getDate("date");
+                Time time = resultSet.getTime("time");
+                LocalDateTime datetime = LocalDateTime.of(date.toLocalDate(), time.toLocalTime());
+                User utilizatorfinal = null;
+                List<User> destinatoriList = new ArrayList<>();
+                ResultSet resultSet1 = statement1.executeQuery();
+                while (resultSet1.next()){
+                for (User u : utilizatori) {
+                    if (u.getId() == utilizator)
+                        utilizatorfinal = u;
+                    if (u.getId() == resultSet1.getLong("to"))
+                            destinatoriList.add(u);
+                }
+            }
+            message = new Message(utilizatorfinal, destinatoriList, msg);
+            message.setId(Id);
+            message.setDate(datetime);
+        }
+        return message;
+    } catch(SQLException e){
+        //e.printStackTrace();
+        return null;
+    }
+
+}
+
+    @Override
+    public Iterable<Message> findAll() {
+        ArrayList<Message> mesaje = new ArrayList<>();
+        try (Connection connection = getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement("SELECT * from message");
+             PreparedStatement statement1 = connection.prepareStatement("SELECT * from replyto WHERE id_msg=?");
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Long Id = resultSet.getLong("id");
+                statement1.setLong(1, Id);
+                Long utilizator = resultSet.getLong("from");
+                String msg = resultSet.getString("message");
+                Date date = resultSet.getDate("date");
+                Time time = resultSet.getTime("time");
+                Long IdReply = resultSet.getLong("reply");
+                LocalDateTime datetime = LocalDateTime.of(date.toLocalDate(),time.toLocalTime());
+                User utilizatorfinal = null;
+                List<User> destinatoriList = new ArrayList<>();
+                Message reply = findOne(IdReply);
+                for (User u:utilizatori) {
+                    if(u.getId()==utilizator)
+                        utilizatorfinal=u;
+                }
+                ResultSet resultSet1 = statement1.executeQuery();
+                while (resultSet1.next()){
+                    for (User u : utilizatori) {
+                        if (u.getId() == resultSet1.getLong("to"))
+                            destinatoriList.add(u);
+                    }
+                }
+                Message message= new Message(utilizatorfinal,destinatoriList,msg);
+                message.setId(Id);
+                message.setDate(datetime);
+                message.setReply(reply);
+                mesaje.add(message);
+            }
+            return mesaje;
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            return mesaje;
+        }
+    }
+
+    @Override
+    public Message save(Message entity) {
+
+        String sql = "insert into message (from,message,date,time,reply) values (?,?,?,?,?)";
+        String sql1 = "insert into replyto( id_msg, to) values(?,?)";
+        try (Connection connection = getConnection(url, username, password);
+             PreparedStatement ps = connection.prepareStatement(sql);
+             PreparedStatement ps1 = connection.prepareStatement(sql1);
+             PreparedStatement statement = connection.prepareStatement("SELECT id from message where (from,message,date,time,reply)=(?,?,?,?,?)")){
+
+            ps.setLong(1, entity.getFrom().getId());
+            ps.setString(2,entity.getMessage());
+            ps.setDate(3,Date.valueOf(entity.getDate().toLocalDate()));
+            ps.setTime(4,Time.valueOf(entity.getDate().toLocalTime()));
+            ps.setDouble(5,entity.getReply().getId());
+            ps.executeUpdate();
+
+            statement.setLong(1, entity.getFrom().getId());
+            statement.setString(2,entity.getMessage());
+            statement.setDate(3,Date.valueOf(entity.getDate().toLocalDate()));
+            statement.setTime(4,Time.valueOf(entity.getDate().toLocalTime()));
+            statement.setDouble(5,entity.getReply().getId());
+            ResultSet resultSet = statement.executeQuery();
+            Long Id=null;
+            while (resultSet.next()) {
+                Id = resultSet.getLong("id");
+            }
+            for (int i=0;i<entity.getTo().size();i++) {
+                ps1.setLong(1,Id);
+                ps1.setLong(2,entity.getTo().get(i).getId());
+                ps1.executeUpdate();}
+            return entity;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Message delete(Long aLong) {
+        String sql = "delete from message where id = ?";
+        String sql1 = "delete from replyto where id = ?";
+        Message m = findOne(aLong);
+        try(Connection connection = getConnection(url, username, password);
+            PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps1 = connection.prepareStatement(sql1)){
+
+            ps.setLong(1, aLong);
+            ps1.setLong(1, aLong);
+            ps.executeUpdate();
+            ps1.executeUpdate();
+            return m;
+        } catch (SQLException throwables) {
+            return null;
+        }
+
+    }
+
+    @Override
+    public Message update(Message entity) {
+        String sql = "update message set message = ? where id = ?";
+        try(Connection connection = getConnection(url, username, password);
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, entity.getMessage());
+            ps.setDouble(2, entity.getId());
+            ps.executeUpdate();
+            return entity;
+        } catch (SQLException e){
+            return null;
+        }
+    }
+}
