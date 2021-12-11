@@ -8,6 +8,9 @@ import socialnetwork.domain.User;
 import socialnetwork.service.Service;
 
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /***
@@ -18,6 +21,7 @@ public class Ui {
 
     private final Service srv;
     private final Scanner in = new Scanner(System.in);
+    BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
     /**
      *constructor
@@ -247,6 +251,9 @@ public class Ui {
                     case 4:
                         uiRejectFriendRequest(user);
                         break;
+                    case 5:
+                        uiReplyAll(user);
+                        break;
                     default:
                         System.out.println("Invalid command!");
                 }
@@ -258,12 +265,14 @@ public class Ui {
         System.out.println("Logged out");
     }
 
+
     private int readCommandLogIn(){
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println("1. Print friend requests");
         System.out.println("2. Send friend request");
         System.out.println("3. Accept friend request");
         System.out.println("4. Reject friend request");
+        System.out.println("5. Reply all to a message");
         System.out.println("0. Log out");
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println("Your choice: ");
@@ -320,6 +329,36 @@ public class Ui {
             System.out.println("Nothing to reject!");
     }
 
+    private void uiReplyAll(User user) throws IOException {
+        List<Message> inbox = srv.getInbox(user);
+        if(inbox.isEmpty())
+            System.out.println("No messages to reply!");
+        else {
+            System.out.println("Your messages are:");
+            for(Message m : inbox)
+                System.out.println(m.getId()+ " : "+m.getText());
+            System.out.println("Choose what(id) message to reply all");
+            Long idMessage = in.nextLong();
+            System.out.println("And what message you want to reply with");
+            String reply = stdin.readLine();
+            int ok=0;
+            Message t = null;
+            for(Message m : inbox)
+                if(m.getId()==idMessage) {
+                    ok++;
+                    t=m;
+                }
+            if(ok==0)
+                System.out.println("Chosen id incorrect!");
+            else {
+                srv.replyAll(t, user, reply);
+                System.out.println("Message sent to all");
+            }
+
+        }
+    }
+
+
     private void uiChronologicalMessages() {
         System.out.println("User1's id:");
         Long id1 = in.nextLong();
@@ -332,8 +371,8 @@ public class Ui {
             mesaje.stream().sorted((a,b)->a.getDate().compareTo(b.getDate()))
                     .forEach(x->{
                         if(x.getReply()!=null)
-                            System.out.println(x.getReply().getDate()+"  Reply la:\n"+x.getReply().getMessage());
-                        System.out.println(x.getDate()+"  "+x.getFrom().getFirstName()+" "+x.getFrom().getLastName()+":\n"+x.getMessage()+"\n");
+                            System.out.println(x.getReply().getDate()+"  Reply la:\n"+x.getReply().getText());
+                        System.out.println(x.getDate()+"  "+x.getFrom().getFirstName()+" "+x.getFrom().getLastName()+":\n"+x.getText()+"\n");
                     });
         }
 

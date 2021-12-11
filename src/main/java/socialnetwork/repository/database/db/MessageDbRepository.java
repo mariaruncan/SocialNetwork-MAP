@@ -66,8 +66,8 @@ public class MessageDbRepository implements  Repository<Long, Message> {
             Message message = null;
             while (resultSet.next()) {
                 Long Id = resultSet.getLong("id");
-                Long utilizator = resultSet.getLong("from");
-                String msg = resultSet.getString("message");
+                Long utilizator = resultSet.getLong("fromm");
+                String msg = resultSet.getString("text");
                 Date date = resultSet.getDate("date");
                 Time time = resultSet.getTime("time");
                 LocalDateTime datetime = LocalDateTime.of(date.toLocalDate(), time.toLocalTime());
@@ -78,7 +78,7 @@ public class MessageDbRepository implements  Repository<Long, Message> {
                 for (User u : utilizatori) {
                     if (u.getId() == utilizator)
                         utilizatorfinal = u;
-                    if (u.getId() == resultSet1.getLong("to"))
+                    if (u.getId() == resultSet1.getLong("touser"))
                             destinatoriList.add(u);
                 }
             }
@@ -105,8 +105,8 @@ public class MessageDbRepository implements  Repository<Long, Message> {
             while (resultSet.next()) {
                 Long Id = resultSet.getLong("id");
                 statement1.setLong(1, Id);
-                Long utilizator = resultSet.getLong("from");
-                String msg = resultSet.getString("message");
+                Long utilizator = resultSet.getLong("fromm");
+                String msg = resultSet.getString("text");
                 Date date = resultSet.getDate("date");
                 Time time = resultSet.getTime("time");
                 Long IdReply = resultSet.getLong("reply");
@@ -121,7 +121,7 @@ public class MessageDbRepository implements  Repository<Long, Message> {
                 ResultSet resultSet1 = statement1.executeQuery();
                 while (resultSet1.next()){
                     for (User u : utilizatori) {
-                        if (u.getId() == resultSet1.getLong("to"))
+                        if (u.getId() == resultSet1.getLong("touser"))
                             destinatoriList.add(u);
                     }
                 }
@@ -141,25 +141,25 @@ public class MessageDbRepository implements  Repository<Long, Message> {
     @Override
     public Message save(Message entity) {
 
-        String sql = "insert into message (from,message,date,time,reply) values (?,?,?,?,?)";
-        String sql1 = "insert into replyto( id_msg, to) values(?,?)";
+        String sql = "insert into message (fromm,text,date,time,reply) values (?,?,?,?,?)";
+        String sql1 = "insert into replyto( id_msg, touser) values(?,?)";
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql);
              PreparedStatement ps1 = connection.prepareStatement(sql1);
-             PreparedStatement statement = connection.prepareStatement("SELECT id from message where (from,message,date,time,reply)=(?,?,?,?,?)")){
+             PreparedStatement statement = connection.prepareStatement("SELECT id from message where (fromm,text,date,time,reply)=(?,?,?,?,?)")){
 
             ps.setLong(1, entity.getFrom().getId());
-            ps.setString(2,entity.getMessage());
+            ps.setString(2,entity.getText());
             ps.setDate(3,Date.valueOf(entity.getDate().toLocalDate()));
             ps.setTime(4,Time.valueOf(entity.getDate().toLocalTime()));
-            ps.setDouble(5,entity.getReply().getId());
+            ps.setLong(5,entity.getReply().getId());
             ps.executeUpdate();
 
             statement.setLong(1, entity.getFrom().getId());
-            statement.setString(2,entity.getMessage());
+            statement.setString(2,entity.getText());
             statement.setDate(3,Date.valueOf(entity.getDate().toLocalDate()));
             statement.setTime(4,Time.valueOf(entity.getDate().toLocalTime()));
-            statement.setDouble(5,entity.getReply().getId());
+            statement.setLong(5,entity.getReply().getId());
             ResultSet resultSet = statement.executeQuery();
             Long Id=null;
             while (resultSet.next()) {
@@ -197,11 +197,11 @@ public class MessageDbRepository implements  Repository<Long, Message> {
 
     @Override
     public Message update(Message entity) {
-        String sql = "update message set message = ? where id = ?";
+        String sql = "update message set text = ? where id = ?";
         try(Connection connection = getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, entity.getMessage());
-            ps.setDouble(2, entity.getId());
+            ps.setString(1, entity.getText());
+            ps.setLong(2, entity.getId());
             ps.executeUpdate();
             return entity;
         } catch (SQLException e){
