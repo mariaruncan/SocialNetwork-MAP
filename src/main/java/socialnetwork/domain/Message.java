@@ -7,14 +7,14 @@ public class Message extends Entity<Long>{
     private Long id;
     private User from;
     private List<User> to;
-    private String message;
+    private String text;
     private LocalDateTime date;
     private  Message reply;
 
-    public Message(User from, List<User> to, String message) {
+    public Message(User from, List<User> to, String text) {
         this.from = from;
         this.to = to;
-        this.message = message;
+        this.text = text;
         this.date=LocalDateTime.now();
         this.reply=null;
     }
@@ -58,18 +58,18 @@ public class Message extends Entity<Long>{
                 "id=" + id +
                 ", from=" + from +
                 ", to=" + to +
-                ", message='" + message + '\'' +
+                ", text='" + text + '\'' +
                 ", date=" + date +
                 ", reply=" + reply +
                 '}';
     }
 
-    public String getMessage() {
-        return message;
+    public String getText() {
+        return text;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public LocalDateTime getDate() {

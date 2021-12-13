@@ -295,5 +295,25 @@ public class Service {
         }
         return  list;
     }
+    public List<Message> getInbox(User user) {
+        List<Message> list = new ArrayList<Message>();
+        for (Message m: messageRepository.findAll()) {
+            for(User to : m.getTo())
+                if(to.getId()==user.getId())
+                    list.add(m);
 
+        }
+        return  list;
+    }
+
+    public void replyAll(Message m, User user, String reply) {
+        ArrayList<User> toList = new ArrayList<User>();
+        toList.add(m.getFrom());
+        for(User u : m.getTo())
+            if(u.getId()!= user.getId())
+                toList.add(u);
+        Message message = new Message(user,toList,reply)   ;
+        message.setReply(m);
+        messageRepository.save(message);
+    }
 }
