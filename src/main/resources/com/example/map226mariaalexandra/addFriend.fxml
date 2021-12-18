@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="249.0" prefWidth="406.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.AddFriendController">
+   <children>
+      <ChoiceBox fx:id="choiceBox" layoutX="234.0" layoutY="115.0" prefWidth="150.0" />
+      <Button layoutX="130.0" layoutY="172.0" mnemonicParsing="false" onAction="#switchMainPage" text="Send friend request" textFill="#2d6b37">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="249.0" layoutY="68.0" text="Add friend" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="115.0" fitWidth="169.0" layoutY="-11.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../mint1.jpeg" />
+         </image>
+      </ImageView>
+      <Label fx:id="friendName" alignment="CENTER" layoutX="2.0" layoutY="110.0" prefHeight="35.0" prefWidth="214.0" text="User name" textAlignment="CENTER" textFill="#1f632b">
+         <font>
+            <Font name="Tahoma" size="21.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

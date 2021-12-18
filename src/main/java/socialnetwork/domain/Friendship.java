@@ -10,9 +10,9 @@ import java.util.Objects;
  */
 public class Friendship extends Entity<Tuple<User,User>> {
 
-    Date date;
     private User user1;
     private User user2;
+    Date date;
 
     /**
      * getter for user1
