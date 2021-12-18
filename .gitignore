@@ -51,4 +51,10 @@ Thumbs.db
 # Added by me
 *.iml
 out/
-
+.gradle/
+build.gradle
+gradlew
+gradlew.bat
+settings.gradle
+build/
+gradle/
