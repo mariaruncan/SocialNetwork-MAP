@@ -316,4 +316,8 @@ public class Service {
         message.setReply(m);
         messageRepository.save(message);
     }
+
+    public Repository<Long, User> getUserRepo() {
+        return this.usersRepo;
+    }
 }

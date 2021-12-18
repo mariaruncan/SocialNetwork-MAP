@@ -6,5 +6,10 @@ module com.example.map226mariaalexandra {
 
 
     opens com.example.map226mariaalexandra to javafx.fxml;
+    opens socialnetwork.domain to javafx.fxml;
+
+
     exports com.example.map226mariaalexandra;
+    exports socialnetwork.domain;
+
 }

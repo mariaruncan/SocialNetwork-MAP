@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="351.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.SocialNetworkController">
+   <children>
+      <ImageView fitHeight="187.0" fitWidth="191.0" layoutX="63.0" layoutY="-48.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../mint1.jpeg" />
+         </image>
+      </ImageView>
+      <Label layoutX="121.0" layoutY="112.0" prefHeight="65.0" prefWidth="125.0" text="Log in" textFill="#f0eded">
+         <font>
+            <Font name="System Bold Italic" size="30.0" />
+         </font>
+      </Label>
+      <Label layoutX="38.0" layoutY="232.0" prefHeight="0.0" prefWidth="32.0" text="User" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="idUsers" layoutX="146.0" layoutY="191.0" prefWidth="150.0" />
+      <Label fx:id="user" contentDisplay="CENTER" layoutX="121.0" layoutY="227.0" prefHeight="31.0" prefWidth="176.0" style="-fx-background-color: white;" textFill="#1e4b2c">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="38.0" layoutY="191.0" text="Choose from" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="36.0" layoutY="270.0" text="Password" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <PasswordField layoutX="121.0" layoutY="270.0" prefHeight="26.0" prefWidth="176.0" promptText="password" />
+      <Button layoutX="141.0" layoutY="323.0" mnemonicParsing="false" onAction="#switchToScene2" text="Log in" textFill="#44734d">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

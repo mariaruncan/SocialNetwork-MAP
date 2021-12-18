@@ -68,8 +68,7 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
                 Date date = resultSet.getDate("date");
                 User user1 = null;
                 User user2 = null;
-                try (Connection connection1 = getConnection(url, username, password);
-                     PreparedStatement statement1 = connection1.prepareStatement("SELECT * from users WHERE id=?")) {
+               try (PreparedStatement statement1 = connection.prepareStatement("SELECT * from users WHERE id=?")){
                      statement1.setDouble(1, idUser1);
                      ResultSet resultSet1 = statement1.executeQuery();
                      while (resultSet1.next()) {
@@ -79,14 +78,8 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
                          user1 = new User(firstName, lastName);
                          user1.setId(id1);
                     }
-                } catch (SQLException e) {
-                    //e.printStackTrace();
-                    return null;
-                }
-                try (Connection connection2 = getConnection(url, username, password);
-                     PreparedStatement statement2 = connection2.prepareStatement("SELECT * from users WHERE id=?")) {
-                     statement2.setDouble(1, idUser2);
-                     ResultSet resultSet2 = statement2.executeQuery();
+                     statement1.setDouble(1, idUser2);
+                     ResultSet resultSet2 = statement1.executeQuery();
                      while (resultSet2.next()) {
                          Long id2 = resultSet2.getLong("id");
                          String firstName = resultSet2.getString("first_name");
@@ -122,8 +115,7 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
                 User user1 = null;
                 User user2 = null;
                 Friendship friendship = null;
-                try (Connection connection1 = getConnection(url, username, password);
-                     PreparedStatement statement1 = connection1.prepareStatement("SELECT * from users WHERE id=?")) {
+                try (PreparedStatement statement1 = connection.prepareStatement("SELECT * from users WHERE id=?")) {
                      statement1.setDouble(1, idUser1);
                      ResultSet resultSet1 = statement1.executeQuery();
                      while (resultSet1.next()) {
@@ -133,14 +125,9 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
                          user1 = new User(firstName, lastName);
                          user1.setId(id1);
                     }
-                } catch (SQLException e) {
-                    //e.printStackTrace();
-                    return null;
-                }
-                try (Connection connection2 = getConnection(url, username, password);
-                     PreparedStatement statement2 = connection2.prepareStatement("SELECT * from users WHERE id=?")) {
-                     statement2.setDouble(1, idUser2);
-                     ResultSet resultSet2 = statement2.executeQuery();
+
+                     statement1.setDouble(1, idUser2);
+                     ResultSet resultSet2 = statement1.executeQuery();
                      while (resultSet2.next()) {
                          Long id2 = resultSet2.getLong("id");
                          String firstName = resultSet2.getString("first_name");
