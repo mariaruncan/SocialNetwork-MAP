@@ -222,7 +222,8 @@ public class Service {
     public FriendRequest addFriendRequest(FriendRequest fr){
         FriendRequest temp = friendRequestsRepo.findOne(new Tuple<>(fr.getFrom(), fr.getTo()));
         if(temp != null)
-            if(temp.getStatus().matches("rejected")) {
+            if(temp.getStatus().matches("rejected") ||
+                    (temp.getStatus().matches("approved") && friendshipsRepo.findOne(new Tuple<>(fr.getFrom(), fr.getTo())) == null)) {
                 return friendRequestsRepo.update(fr);
             }
             else

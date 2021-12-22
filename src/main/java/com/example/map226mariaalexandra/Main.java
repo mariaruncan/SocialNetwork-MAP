@@ -19,15 +19,16 @@ import socialnetwork.service.Service;
 public class Main {
 
     public static void main(String[] args) {
+        String url = "jdbc:postgresql://localhost:5432/SocialNetwork";
+        String username = "postgres";
+        String password = "postgres";
 
-        Repository<Long, User> userRepo = new UserDbRepository("jdbc:postgresql://localhost:5432/Lab4",
-                "postgres", "parola",new UserValidator());
-        Repository<Tuple<User, User>, Friendship> friendshipRepository = new FriendshipDbRepository("jdbc:postgresql://localhost:5432/Lab4",
-                "postgres", "parola",new FriendshipValidator());
-        Repository<Tuple<User, User>, FriendRequest> friendRequestRepository = new FriendRequestDbRepository("jdbc:postgresql://localhost:5432/Lab4",
-                "postgres", "parola",new FriendRequestValidator());
-        Repository<Long, Message> messageRepo = new MessageDbRepository("jdbc:postgresql://localhost:5432/Lab4",
-                "postgres", "parola",userRepo);
+        Repository<Long, User> userRepo = new UserDbRepository(url, username, password, new UserValidator());
+        Repository<Tuple<User, User>, Friendship> friendshipRepository = new FriendshipDbRepository(url, username,
+                password,new FriendshipValidator());
+        Repository<Tuple<User, User>, FriendRequest> friendRequestRepository = new FriendRequestDbRepository(url,
+                username, password,new FriendRequestValidator());
+        Repository<Long, Message> messageRepo = new MessageDbRepository(url, username, password,userRepo);
 
         Service service = new Service(userRepo,friendshipRepository,messageRepo, friendRequestRepository);
 

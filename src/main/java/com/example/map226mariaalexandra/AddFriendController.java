@@ -1,25 +1,44 @@
 package com.example.map226mariaalexandra;
 
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import socialnetwork.domain.FriendRequest;
+import socialnetwork.domain.Friendship;
 import socialnetwork.domain.User;
+import socialnetwork.domain.UserDTO;
+import socialnetwork.domain.validators.ValidationException;
 import socialnetwork.service.Service;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class AddFriendController {
     @FXML
-    private Label friendName;
+    public TableView<UserDTO> tableView;
     @FXML
-    private ChoiceBox<Long> choiceBox;
+    public TableColumn<UserDTO, Long> id;
+    @FXML
+    public TableColumn<UserDTO, String> name;
+    @FXML
+    public TextField nameTextField;
+    @FXML
+    public Button sendButton;
+
 
     private Service srv;
     private Stage stage;
@@ -28,39 +47,83 @@ public class AddFriendController {
     private User user;
 
 
-    private void init() {
-        if(srv!=null)
-            for( User u : srv.getAllUsers())
-                choiceBox.getItems().add(u.getId().longValue());
-        choiceBox.setOnAction(this::onIdUserSelect);
+    private void showAlert(String title, String msg){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
-    private void onIdUserSelect(ActionEvent event) {
-        Long idUser = choiceBox.getValue();
-        User u=srv.getUser(idUser);
-        friendName.setText("  "+u.getFirstName()+" "+u.getLastName());
 
+    private void init(){
+        nameTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                showUsers();
+            }
+        });
     }
+
+    private void showUsers() {
+        tableView.getItems().clear();
+        List<User> users = StreamSupport.stream(srv.getAllUsers().spliterator(), false)
+                .filter(x -> (x.getFirstName() + " " + x.getLastName()).startsWith(nameTextField.getText()))
+                .collect(Collectors.toList());
+
+
+        id.setCellValueFactory(new PropertyValueFactory<UserDTO, Long>("id"));
+        name.setCellValueFactory(new PropertyValueFactory<UserDTO, String>("name"));
+
+        ObservableList<UserDTO> objects = FXCollections.observableArrayList();
+        for(User u : users)
+            objects.add(new UserDTO(u.getId(), u.getFirstName() + " " + u.getLastName()));
+
+        tableView.setItems(objects);
+    }
+
     public void setService(Service srv) {
-        this.srv=srv;
+        this.srv = srv;
         init();
+        showUsers();
     }
 
     public void setUser(User user) {
-        this.user=user;
+        this.user = user;
     }
 
     public void switchMainPage(ActionEvent event) throws IOException {
 
-        srv.addFriendRequest(new FriendRequest(user, srv.getUser(choiceBox.getValue())));
-        FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("loggedIn.fxml"));
+        FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("welcomePage.fxml"));
         root=loader.load();
-        MainPageController controller = loader.getController();
+        WelcomePageController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(user);
         stage =(Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+    }
+
+    public void onSendButtonClick(ActionEvent actionEvent) {
+        if(tableView.getSelectionModel().getSelectedItem() == null){
+            showAlert("Ops", "Please select an user!");
+            return;
+        }
+
+        Long id = tableView.getSelectionModel().getSelectedItem().getId();
+        User userSelected = srv.getUser(id);
+        try {
+            FriendRequest fr = srv.addFriendRequest(new FriendRequest(user, userSelected));
+            if(fr != null) {
+                showAlert("Yay", "Friend request sent to " + userSelected.getFirstName() + " " + userSelected.getLastName());
+            }
+            else
+                showAlert("Ops", "Can not send friend request!");
+        }
+        catch(ValidationException ex){
+            showAlert("Ops", ex.getMessage());
+        }
 
     }
 }
