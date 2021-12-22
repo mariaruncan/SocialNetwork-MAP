@@ -46,7 +46,7 @@ public class WelcomePageController {
 
 
     private  void  displayName(){
-        userLabel.setText("Welcome, " + user.getFirstName() + " " + user.getLastName());
+        userLabel.setText("Welcome, " + user.getFirstName() + " " + user.getLastName() + "!");
     }
 
 
@@ -109,9 +109,22 @@ public class WelcomePageController {
         stage.show();
 
     }
+
+    private void showAlert(String title, String msg){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
     public void onRemoveFriendButtonClick(){
+        if(tableView.getSelectionModel().getSelectedItem() == null) {
+            showAlert("Ops", "Please select a friend!");
+            return;
+        }
         Long id = tableView.getSelectionModel().getSelectedItem().getId();
-        srv.removeFriendship(user.getId(),id);
+        srv.removeFriendship(user.getId(), id);
         showFriends();
 
     }

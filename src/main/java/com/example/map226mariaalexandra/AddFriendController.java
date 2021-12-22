@@ -15,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import socialnetwork.domain.FriendRequest;
-import socialnetwork.domain.Friendship;
 import socialnetwork.domain.User;
 import socialnetwork.domain.UserDTO;
 import socialnetwork.domain.validators.ValidationException;
@@ -24,7 +23,6 @@ import socialnetwork.service.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class AddFriendController {
@@ -45,6 +43,7 @@ public class AddFriendController {
     private Scene scene;
     private Parent root;
     private User user;
+    private List<User> allUsers;
 
 
     private void showAlert(String title, String msg){
@@ -66,7 +65,7 @@ public class AddFriendController {
 
     private void showUsers() {
         tableView.getItems().clear();
-        List<User> users = StreamSupport.stream(srv.getAllUsers().spliterator(), false)
+        List<User> users = allUsers.stream()
                 .filter(x -> (x.getFirstName() + " " + x.getLastName()).startsWith(nameTextField.getText()))
                 .collect(Collectors.toList());
 
@@ -83,6 +82,7 @@ public class AddFriendController {
 
     public void setService(Service srv) {
         this.srv = srv;
+        allUsers = StreamSupport.stream(srv.getAllUsers().spliterator(), false).collect(Collectors.toList());
         init();
         showUsers();
     }
