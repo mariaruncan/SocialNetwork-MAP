@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="427.0" prefWidth="513.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.MainPageController">
+<AnchorPane prefHeight="427.0" prefWidth="513.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.WelcomePageController">
    <children>
       <ImageView fitHeight="88.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -35,22 +35,22 @@
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" layoutX="112.0" layoutY="98.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="30.0" prefWidth="114.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Add friends" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" layoutX="112.0" layoutY="98.0" mnemonicParsing="false" onAction="#onAddFriendButtonClick" prefHeight="30.0" prefWidth="114.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Add friends" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" layoutX="226.0" layoutY="98.0" mnemonicParsing="false" onAction="#removeFriend" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Remove friend" textFill="WHITE">
+      <Button alignment="CENTER" layoutX="226.0" layoutY="98.0" mnemonicParsing="false" onAction="#onRemoveFriendButtonClick" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Remove friend" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" layoutX="356.0" layoutY="98.0" mnemonicParsing="false" onAction="#switchFriendRequests" prefHeight="30.0" prefWidth="153.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="See friend requests" textFill="WHITE">
+      <Button alignment="CENTER" layoutX="356.0" layoutY="98.0" mnemonicParsing="false" onAction="#switchToFriendRequestsPage" prefHeight="30.0" prefWidth="153.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="See friend requests" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="logOut" layoutX="375.0" layoutY="57.0" mnemonicParsing="false" onAction="#switchMintPage" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;" text="Log out" textFill="#f7f7f7">
+      <Button fx:id="logOut" layoutX="375.0" layoutY="57.0" mnemonicParsing="false" onAction="#switchToLogInPage" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;" text="Log out" textFill="#f7f7f7">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

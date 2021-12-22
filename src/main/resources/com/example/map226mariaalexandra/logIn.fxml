@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="351.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.SocialNetworkController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="351.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.LogInController">
    <children>
       <ImageView fitHeight="187.0" fitWidth="191.0" layoutX="63.0" layoutY="-48.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -43,7 +43,7 @@
          </font>
       </Label>
       <PasswordField layoutX="121.0" layoutY="270.0" prefHeight="26.0" prefWidth="176.0" promptText="password" />
-      <Button layoutX="141.0" layoutY="323.0" mnemonicParsing="false" onAction="#switchToScene2" text="Log in" textFill="#44734d">
+      <Button layoutX="141.0" layoutY="323.0" mnemonicParsing="false" onAction="#switchToWelcomePage" text="Log in" textFill="#44734d">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>

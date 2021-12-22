@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import socialnetwork.domain.FriendRequest;
 import socialnetwork.domain.Friendship;
 import socialnetwork.domain.User;
 import socialnetwork.domain.FriendDTO;
@@ -20,7 +21,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-public class MainPageController {
+public class WelcomePageController {
     @FXML
     private Label userLabel;
 
@@ -44,9 +45,10 @@ public class MainPageController {
     private User user;
 
 
-    private  void  displayName(User user){
-        userLabel.setText("WELCOME "+ user.getFirstName()+" "+user.getLastName());
+    private  void  displayName(){
+        userLabel.setText("Welcome, " + user.getFirstName() + " " + user.getLastName());
     }
+
 
     @FXML
     public void showFriends(){
@@ -60,19 +62,19 @@ public class MainPageController {
         ObservableList<FriendDTO> objects = FXCollections.observableArrayList();
         for(Friendship f : friends)
             if(f.getUser1().getId()== user.getId())
-                objects.add(new FriendDTO(f.getUser2().getId(),f.getUser2().getLastName()+" "+f.getUser2().getFirstName(),f.getDate()));
+                objects.add(new FriendDTO(f.getUser2().getId(),f.getUser2().getFirstName() + " " + f.getUser2().getLastName(), f.getDate()));
             else
-                objects.add(new FriendDTO(f.getUser1().getId(),f.getUser1().getLastName()+" "+f.getUser1().getFirstName(),f.getDate()));
+                objects.add(new FriendDTO(f.getUser1().getId(),f.getUser1().getFirstName() + " " + f.getUser1().getLastName(), f.getDate()));
 
         tableView.setItems(objects);
 
     }
 
-    public void switchMintPage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("mint.fxml"));
+    public void switchToLogInPage(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("logIn.fxml"));
         root=loader.load();
 
-        SocialNetworkController controller = loader.getController();
+        LogInController controller = loader.getController();
         controller.setRepo(srv.getUserRepo());
         stage =(Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -80,14 +82,23 @@ public class MainPageController {
         stage.show();
     }
 
-    public void switchFriendRequests(){
+    public void switchToFriendRequestsPage(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("friendRequests.fxml"));
+        root = loader.load();
 
+        FriendRequestsController controller = loader.getController();
+        controller.setUser(user);
+        controller.setService(srv);
+        stage =(Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
-    public void addFriend(ActionEvent event) throws IOException {
+    public void onAddFriendButtonClick(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("addFriend.fxml"));
-        root=loader.load();
+        root = loader.load();
 
         AddFriendController controller = loader.getController();
         controller.setService(srv);
@@ -98,16 +109,16 @@ public class MainPageController {
         stage.show();
 
     }
-    public void removeFriend(){
-        Long id=tableView.getSelectionModel().getSelectedItem().getId();
+    public void onRemoveFriendButtonClick(){
+        Long id = tableView.getSelectionModel().getSelectedItem().getId();
         srv.removeFriendship(user.getId(),id);
         showFriends();
 
     }
 
     public void setUser(User userr) {
-        this.user=userr;
-        displayName(user);
+        this.user = userr;
+        displayName();
         showFriends();
     }
 
