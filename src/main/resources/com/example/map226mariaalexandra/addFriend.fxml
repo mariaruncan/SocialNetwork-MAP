@@ -44,7 +44,12 @@
                         <Font name="Century" size="13.0" />
                      </font>
                   </Button>
-                  <Button layoutX="138.0" layoutY="249.0" mnemonicParsing="false" onAction="#switchMainPage" style="-fx-background-color: #9fc9b2;" text="Back" textFill="#f7f7f7">
+                  <Button layoutX="138.0" layoutY="285.0" mnemonicParsing="false" onAction="#switchMainPage" style="-fx-background-color: #9fc9b2;" text="Back" textFill="#f7f7f7">
+                     <font>
+                        <Font name="Century" size="13.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="seeRequestsButton" layoutX="81.0" layoutY="249.0" mnemonicParsing="false" onAction="#onSeeRequestsButtonClick" style="-fx-background-color: #9fc9b2;" text="See sent friend requests" textFill="#f7f7f7">
                      <font>
                         <Font name="Century" size="13.0" />
                      </font>

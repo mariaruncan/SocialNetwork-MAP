@@ -36,6 +36,8 @@ public class AddFriendController {
     public TextField nameTextField;
     @FXML
     public Button sendButton;
+    @FXML
+    public Button seeRequestsButton;
 
 
     private Service srv;
@@ -124,6 +126,19 @@ public class AddFriendController {
         catch(ValidationException ex){
             showAlert("Ops", ex.getMessage());
         }
+
+    }
+
+    public void onSeeRequestsButtonClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("seeSentRequests.fxml"));
+        root=loader.load();
+        SeeSentRequestsController controller = loader.getController();
+        controller.setUser(user);
+        controller.setService(srv);
+        stage =(Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
     }
 }

@@ -321,4 +321,28 @@ public class Service {
     public Repository<Long, User> getUserRepo() {
         return this.usersRepo;
     }
+
+    public List<FriendRequest> getUserSentFriendRequests(Long id) {
+        return StreamSupport.stream(friendRequestsRepo.findAll().spliterator(), false)
+                .filter(fr -> fr.getFrom().getId() == id)
+                .collect(Collectors.toList());
+    }
+
+    public FriendRequest removeFriendRequest(User from, User to) {
+        List<FriendRequest> requestList = getUserFriendRequests(to.getId())
+                .stream()
+                .filter(fr -> fr.getFrom().getId() == from.getId())
+                .collect(Collectors.toList());
+
+        if(requestList.isEmpty())
+            return null;
+
+        FriendRequest fr = requestList.get(0);
+        if(!fr.getStatus().matches("pending"))
+            return null;
+
+        fr=friendRequestsRepo.delete(new Tuple<User,User>(from,to));
+
+        return fr;
+    }
 }
