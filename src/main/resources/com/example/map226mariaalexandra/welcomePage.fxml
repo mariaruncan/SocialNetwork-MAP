@@ -35,7 +35,7 @@
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" layoutX="112.0" layoutY="98.0" mnemonicParsing="false" onAction="#onAddFriendButtonClick" prefHeight="30.0" prefWidth="114.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Add friends" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" layoutX="112.0" layoutY="98.0" mnemonicParsing="false" onAction="#onAddFriendButtonClick" prefHeight="30.0" prefWidth="114.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Search users" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>

@@ -96,7 +96,7 @@ public class SeeSentRequestsController {
 
     public void switchAddFriendPage(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("addFriend.fxml"));
+        FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("searchUsers.fxml"));
         root=loader.load();
         AddFriendController controller = loader.getController();
         controller.setService(srv);

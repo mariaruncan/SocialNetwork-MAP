@@ -97,7 +97,7 @@ public class WelcomePageController {
 
     public void onAddFriendButtonClick(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("addFriend.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("searchUsers.fxml"));
         root = loader.load();
 
         AddFriendController controller = loader.getController();
