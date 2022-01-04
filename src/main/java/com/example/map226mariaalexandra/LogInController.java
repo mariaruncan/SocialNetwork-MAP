@@ -48,9 +48,9 @@ public class LogInController {
             return;
         }
 
-        String url = "jdbc:postgresql://localhost:5432/SocialNetwork";
+        String url = "jdbc:postgresql://localhost:5432/Lab4";
         String username = "postgres";
-        String password = "postgres";
+        String password = "parola";
 
         Repository<Tuple<User, User>, Friendship> friendshipRepository = new FriendshipDbRepository(url, username,
                 password, new FriendshipValidator());

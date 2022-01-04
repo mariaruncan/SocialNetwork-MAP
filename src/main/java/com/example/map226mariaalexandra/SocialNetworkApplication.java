@@ -17,8 +17,8 @@ public class SocialNetworkApplication extends Application {
         launch();
     }
 
-    private Repository<Long, User> userRepo = new UserDbRepository("jdbc:postgresql://localhost:5432/SocialNetwork",
-           "postgres", "postgres",new UserValidator());
+    private Repository<Long, User> userRepo = new UserDbRepository("jdbc:postgresql://localhost:5432/Lab4",
+           "postgres", "parola",new UserValidator());
 
     @Override
     public void start(Stage stage) throws IOException {
