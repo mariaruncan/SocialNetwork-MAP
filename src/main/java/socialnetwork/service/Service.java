@@ -307,6 +307,11 @@ public class Service {
         return  list;
     }
 
+
+    public void sendMessage(Message m){
+        messageRepository.save(m);
+    }
+
     public void replyAll(Message m, User user, String reply) {
         ArrayList<User> toList = new ArrayList<User>();
         toList.add(m.getFrom());
