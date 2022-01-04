@@ -350,4 +350,8 @@ public class Service {
 
         return fr;
     }
+
+    public Message getMessage(Long id){
+        return messageRepository.findOne(id);
+    }
 }
