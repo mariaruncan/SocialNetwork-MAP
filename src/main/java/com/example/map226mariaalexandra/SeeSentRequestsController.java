@@ -15,7 +15,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import socialnetwork.domain.FriendRequest;
 import socialnetwork.domain.FriendRequestDTO;
-import socialnetwork.domain.Friendship;
 import socialnetwork.domain.User;
 import socialnetwork.service.Service;
 
@@ -98,7 +97,7 @@ public class SeeSentRequestsController {
 
         FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("searchUsers.fxml"));
         root=loader.load();
-        AddFriendController controller = loader.getController();
+        SearchUsersController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(user);
         stage =(Stage)((Node)event.getSource()).getScene().getWindow();

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class AddFriendController {
+public class SearchUsersController {
     @FXML
     public TableView<UserDTO> tableView;
     @FXML
@@ -57,12 +57,7 @@ public class AddFriendController {
     }
 
     private void init(){
-        nameTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                showUsers();
-            }
-        });
+        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> showUsers());
     }
 
     private void showUsers() {
@@ -140,5 +135,32 @@ public class AddFriendController {
         stage.setScene(scene);
         stage.show();
 
+    }
+
+    public void onSeeMessagesButtonClick(ActionEvent event) throws IOException{
+        if(tableView.getSelectionModel().getSelectedItem() == null){
+            showAlert("Ops", "Please select an user!");
+            return;
+        }
+
+
+        Long id = tableView.getSelectionModel().getSelectedItem().getId();
+        if(id == user.getId()) {
+            showAlert("Ops", "Can not send a message to yourself!");
+            return;
+        }
+
+        User userSelected = srv.getUser(id);
+
+        FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("messagesWithUser.fxml"));
+        root = loader.load();
+        MessagesWithUserController controller = loader.getController();
+        controller.setUserLogged(user);
+        controller.setUserMessaged(userSelected);
+        controller.setService(srv);
+        stage =(Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

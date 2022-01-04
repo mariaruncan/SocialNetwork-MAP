@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import socialnetwork.domain.FriendRequest;
 import socialnetwork.domain.Friendship;
 import socialnetwork.domain.User;
 import socialnetwork.domain.FriendDTO;
@@ -100,7 +99,7 @@ public class WelcomePageController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("searchUsers.fxml"));
         root = loader.load();
 
-        AddFriendController controller = loader.getController();
+        SearchUsersController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(user);
         stage =(Stage)((Node)event.getSource()).getScene().getWindow();
