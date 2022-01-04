@@ -23,19 +23,19 @@ import java.util.List;
 
 public class MessagesWithUserController {
     @FXML
-    public TableView tableView;
+    public TableView<MessageDTO> tableView;
     @FXML
-    public TableColumn id;
+    public TableColumn<MessageDTO, Long> id;
     @FXML
-    public TableColumn from;
+    public TableColumn<MessageDTO, String> from;
     @FXML
-    public TableColumn to;
+    public TableColumn<MessageDTO, String> to;
     @FXML
-    public TableColumn text;
+    public TableColumn<MessageDTO, String> text;
     @FXML
-    public TableColumn date;
+    public TableColumn<MessageDTO, LocalDateTime> date;
     @FXML
-    public TableColumn reply;
+    public TableColumn<MessageDTO, String> reply;
     @FXML
     public TextField textField;
     @FXML
@@ -101,6 +101,11 @@ public class MessagesWithUserController {
 
     public void onSendButtonClick(ActionEvent actionEvent) {
         String text = textField.getText();
+        if(text.isEmpty()){
+            showAlert("Ops", "Please write message text!");
+            return;
+        }
+
         List<User> toList = new ArrayList<>();
         toList.add(userMessaged);
         srv.sendMessage(new Message(userLogged, toList, text));
@@ -109,10 +114,23 @@ public class MessagesWithUserController {
 
     public void onButtonReplyClick(ActionEvent actionEvent) {
         if(tableView.getSelectionModel().getSelectedItem() == null){
-            showAlert("Ops", "Please select an user!");
+            showAlert("Ops", "Please select a message!");
             return;
         }
 
+        String text = textField.getText();
+        if(text.isEmpty()){
+            showAlert("Ops", "Please write message text!");
+            return;
+        }
+
+        Long id = tableView.getSelectionModel().getSelectedItem().getId();
+
+        List<User> toList = new ArrayList<>();
+        toList.add(userMessaged);
+        Message msg = new Message(userLogged, toList, text);
+        msg.setReply(srv.getMessage(id));
+        srv.sendMessage(msg);
         init();
     }
 
@@ -121,6 +139,16 @@ public class MessagesWithUserController {
             showAlert("Ops", "Please select an user!");
             return;
         }
+
+        String text = textField.getText();
+        if(text.isEmpty()){
+            showAlert("Ops", "Please write message text!");
+            return;
+        }
+
+        Long id = tableView.getSelectionModel().getSelectedItem().getId();
+        Message msg = srv.getMessage(id);
+        srv.replyAll(msg, userLogged, text);
 
         init();
     }
