@@ -314,7 +314,8 @@ public class Service {
 
     public void replyAll(Message m, User user, String reply) {
         ArrayList<User> toList = new ArrayList<User>();
-        toList.add(m.getFrom());
+        if(m.getFrom().getId() != user.getId())
+            toList.add(m.getFrom());
         for(User u : m.getTo())
             if(u.getId()!= user.getId())
                 toList.add(u);
