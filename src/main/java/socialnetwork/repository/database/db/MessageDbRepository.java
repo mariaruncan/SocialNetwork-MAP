@@ -4,9 +4,13 @@ import socialnetwork.domain.Message;
 import socialnetwork.domain.User;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.sql.DriverManager.getConnection;
@@ -146,24 +150,28 @@ public class MessageDbRepository implements  Repository<Long, Message> {
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql);
              PreparedStatement ps1 = connection.prepareStatement(sql1);
-             PreparedStatement statement = connection.prepareStatement("SELECT id from message where (fromm,text,date,time,reply)=(?,?,?,?,?)")){
+             PreparedStatement statement = connection.prepareStatement("SELECT MAX(id) from message")){
 
             ps.setLong(1, entity.getFrom().getId());
             ps.setString(2,entity.getText());
             ps.setDate(3,Date.valueOf(entity.getDate().toLocalDate()));
             ps.setTime(4,Time.valueOf(entity.getDate().toLocalTime()));
-            ps.setLong(5,entity.getReply().getId());
+            if(entity.getReply()!=null)
+                ps.setLong(5,entity.getReply().getId());
+            else
+                ps.setNull(5,Types.DOUBLE);
             ps.executeUpdate();
 
-            statement.setLong(1, entity.getFrom().getId());
-            statement.setString(2,entity.getText());
-            statement.setDate(3,Date.valueOf(entity.getDate().toLocalDate()));
-            statement.setTime(4,Time.valueOf(entity.getDate().toLocalTime()));
-            statement.setLong(5,entity.getReply().getId());
+           // statement.setLong(1, entity.getFrom().getId());
+           // statement.setString(2,entity.getText());
+            //if(entity.getReply()!=null)
+             //   statement.setLong(3,entity.getReply().getId());
+           // else
+              //  statement.setNull(3,Types.DOUBLE);
             ResultSet resultSet = statement.executeQuery();
             Long Id=null;
             while (resultSet.next()) {
-                Id = resultSet.getLong("id");
+                Id = resultSet.getLong("max");
             }
             for (int i=0;i<entity.getTo().size();i++) {
                 ps1.setLong(1,Id);
