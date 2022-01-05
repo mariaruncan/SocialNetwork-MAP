@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="940.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.MessagesWithUserController">
    <children>
       <SplitPane dividerPositions="0.6662404092071611" prefHeight="400.0" prefWidth="940.0" style="-fx-background-color: #9fc9b2;">
@@ -30,7 +29,7 @@
                   </TableView>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="398.0" prefWidth="317.0" style="-fx-background-color: #45a583;">
+            <AnchorPane onMouseClicked="#refreshTable" prefHeight="398.0" prefWidth="317.0" style="-fx-background-color: #45a583;">
                <children>
                   <ImageView fitHeight="96.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true">
                      <image>

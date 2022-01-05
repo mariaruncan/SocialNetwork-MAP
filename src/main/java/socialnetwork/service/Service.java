@@ -5,13 +5,12 @@ import socialnetwork.domain.Friendship;
 import socialnetwork.domain.Message;
 import socialnetwork.domain.Tuple;
 import socialnetwork.domain.User;
+import socialnetwork.domain.utils.Observable;
 import socialnetwork.repository.database.db.Repository;
-import socialnetwork.utils.Graph;
+import socialnetwork.domain.utils.Graph;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -20,7 +19,7 @@ import static java.lang.Math.toIntExact;
 /**
  * Service class
  */
-public class Service {
+public class Service implements Observable {
 
     private final Repository<Long, User> usersRepo;
     private final Repository<Tuple<User, User>, Friendship> friendshipsRepo;
@@ -79,7 +78,9 @@ public class Service {
         if(a && b)
         {
             Friendship f = new Friendship(usersRepo.findOne(u1), usersRepo.findOne(u2));
-            return friendshipsRepo.save(f);
+            friendshipsRepo.save(f);
+            this.update();
+            return f;
         }
         return null;
     }
@@ -93,7 +94,9 @@ public class Service {
     public Friendship removeFriendship(long u1, long u2) {
         usersRepo.findOne(u1).removeFriend(usersRepo.findOne(u2));
         usersRepo.findOne(u2).removeFriend(usersRepo.findOne(u1));
-        return friendshipsRepo.delete(new Tuple<>(usersRepo.findOne(u1), usersRepo.findOne(u2)));
+        Friendship f= friendshipsRepo.delete(new Tuple<>(usersRepo.findOne(u1), usersRepo.findOne(u2)));
+        this.update();
+        return f;
     }
 
     /**
@@ -224,18 +227,24 @@ public class Service {
         if(temp != null)
             if(temp.getStatus().matches("rejected") ||
                     (temp.getStatus().matches("approved") && friendshipsRepo.findOne(new Tuple<>(fr.getFrom(), fr.getTo())) == null)) {
-                return friendRequestsRepo.update(fr);
+                FriendRequest f= friendRequestsRepo.update(fr);
+                this.update();
+                return f;
             }
             else
                 return null;
         temp = friendRequestsRepo.findOne(new Tuple<>(fr.getTo(), fr.getFrom()));
         if(temp != null)
             if(temp.getStatus().matches("rejected")) {
-                return friendRequestsRepo.save(fr);
+                FriendRequest f= friendRequestsRepo.save(fr);
+                this.update();
+                return f;
             }
             else
                 return null;
-        return friendRequestsRepo.save(fr);
+        FriendRequest f= friendRequestsRepo.save(fr);
+        this.update();
+        return f;
     }
 
     public Friendship acceptFriendRequest(User to, User from){
@@ -254,7 +263,9 @@ public class Service {
         fr.setStatus("approved");
         friendRequestsRepo.update(fr);
 
-        return addFriendship(to.getId(), from.getId());
+        Friendship f= addFriendship(to.getId(), from.getId());
+        this.update();
+        return f;
     }
 
     public boolean rejectFriendRequest(User to, User from){
@@ -272,6 +283,7 @@ public class Service {
 
         fr.setStatus("rejected");
         friendRequestsRepo.update(fr);
+        this.update();
 
         return true;
     }
@@ -310,6 +322,7 @@ public class Service {
 
     public void sendMessage(Message m){
         messageRepository.save(m);
+        this.update();
     }
 
     public void replyAll(Message m, User user, String reply) {
@@ -322,6 +335,7 @@ public class Service {
         Message message = new Message(user,toList,reply)   ;
         message.setReply(m);
         messageRepository.save(message);
+        this.update();
     }
 
     public Repository<Long, User> getUserRepo() {

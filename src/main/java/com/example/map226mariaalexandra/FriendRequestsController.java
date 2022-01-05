@@ -15,18 +15,21 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import socialnetwork.domain.*;
+import socialnetwork.domain.utils.Observer;
 import socialnetwork.service.Service;
 
 import java.io.IOException;
 import java.util.List;
 
-public class FriendRequestsController {
+public class FriendRequestsController implements Observer {
 
     private Service srv;
     private Stage stage;
     private Scene scene;
     private Parent root;
     private User user;
+    private ObservableList<FriendRequestDTO> requests;
+
 
     @FXML
     private  TableColumn<FriendRequestDTO, String> name;
@@ -90,16 +93,17 @@ public class FriendRequestsController {
         name.setCellValueFactory(new PropertyValueFactory<FriendRequestDTO, String>("name"));
         status.setCellValueFactory(new PropertyValueFactory<FriendRequestDTO, String>("status"));
 
-        ObservableList<FriendRequestDTO> objects = FXCollections.observableArrayList();
         for(FriendRequest f : friendRequests)
-            objects.add(new FriendRequestDTO(f.getFrom().getId(), f.getFrom().getFirstName() + " " + f.getFrom().getLastName(), f.getStatus()));
+            requests.add(new FriendRequestDTO(f.getFrom().getId(), f.getFrom().getFirstName() + " " + f.getFrom().getLastName(), f.getStatus()));
 
-        tableView.setItems(objects);
+        tableView.setItems(requests);
+        this.srv.addObserver(this);
 
     }
 
     public void setService(Service srv) {
         this.srv = srv;
+        this.requests = FXCollections.observableArrayList();
         init();
     }
 
@@ -122,4 +126,12 @@ public class FriendRequestsController {
     }
 
 
+    @Override
+    public void update() {
+        this.requests.clear();
+        List<FriendRequest> friendRequests = srv.getUserFriendRequests(user.getId());
+        for(FriendRequest f : friendRequests)
+            requests.add(new FriendRequestDTO(f.getFrom().getId(), f.getFrom().getFirstName() + " " + f.getFrom().getLastName(), f.getStatus()));
+
+    }
 }

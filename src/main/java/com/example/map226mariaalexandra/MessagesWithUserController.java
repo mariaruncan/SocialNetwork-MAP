@@ -9,19 +9,21 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import socialnetwork.domain.Message;
 import socialnetwork.domain.MessageDTO;
 import socialnetwork.domain.User;
 import socialnetwork.service.Service;
+import socialnetwork.domain.utils.Observer;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessagesWithUserController {
+public class MessagesWithUserController implements Observer {
     @FXML
     public TableView<MessageDTO> tableView;
     @FXML
@@ -54,16 +56,16 @@ public class MessagesWithUserController {
     private Parent root;
     private User userLogged;
     private User userMessaged;
-    private List<Message> messages;
+    private ObservableList<MessageDTO> messages;
 
     public void setService(Service srv) {
         this.srv = srv;
+        this.messages = FXCollections.observableArrayList();
         init();
     }
 
     private void init(){
         titleLabel.setText("Messages with " + userMessaged.getFirstName() + " " + userMessaged.getLastName());
-        messages = srv.getChats(userLogged.getId(), userMessaged.getId());
         showMessages();
     }
 
@@ -85,12 +87,22 @@ public class MessagesWithUserController {
         date.setCellValueFactory(new PropertyValueFactory<MessageDTO, LocalDateTime>("date"));
         reply.setCellValueFactory(new PropertyValueFactory<MessageDTO, String>("reply"));
 
-        ObservableList<MessageDTO> objects = FXCollections.observableArrayList();
-        for(Message m : messages)
-            objects.add(new MessageDTO(m));
-        tableView.setItems(objects);
+        for(Message m : srv.getChats(userLogged.getId(), userMessaged.getId()))
+            messages.add(new MessageDTO(m));
+        tableView.setItems(messages);
+        this.srv.addObserver(this);
     }
 
+    @FXML
+    private void refreshTable(MouseEvent event){
+        try {
+            final List<Message> ms = srv.getChats(userLogged.getId(), userMessaged.getId());
+            for( int i = messages.size();i<ms.size();i++)
+                    this.messages.add(new MessageDTO(ms.get(i)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void setUserLogged(User user) {
         this.userLogged = user;
     }
@@ -109,7 +121,6 @@ public class MessagesWithUserController {
         List<User> toList = new ArrayList<>();
         toList.add(userMessaged);
         srv.sendMessage(new Message(userLogged, toList, text));
-        init();
     }
 
     public void onButtonReplyClick(ActionEvent actionEvent) {
@@ -131,7 +142,6 @@ public class MessagesWithUserController {
         Message msg = new Message(userLogged, toList, text);
         msg.setReply(srv.getMessage(id));
         srv.sendMessage(msg);
-        init();
     }
 
     public void onReplyAllButton(ActionEvent actionEvent) {
@@ -150,7 +160,6 @@ public class MessagesWithUserController {
         Message msg = srv.getMessage(id);
         srv.replyAll(msg, userLogged, text);
 
-        init();
     }
 
     public void switchSearchUsersPage(ActionEvent event) throws IOException {
@@ -165,4 +174,17 @@ public class MessagesWithUserController {
         stage.setScene(scene);
         stage.show();
     }
+
+    @Override
+    public void update() {
+        try {
+            final List<Message> ms = srv.getChats(userLogged.getId(), userMessaged.getId());
+            this.messages
+                    .add(new MessageDTO(ms.get(ms.size() - 1)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

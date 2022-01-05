@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="427.0" prefWidth="513.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.WelcomePageController">
+<AnchorPane onMouseClicked="#update" prefHeight="427.0" prefWidth="513.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.WelcomePageController">
    <children>
       <ImageView fitHeight="88.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -22,7 +22,7 @@
             <Font name="Century" size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="tableView" layoutX="3.0" layoutY="128.0" prefHeight="296.0" prefWidth="506.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;">
+      <TableView fx:id="tableView" layoutX="3.0" layoutY="131.0" prefHeight="296.0" prefWidth="506.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;">
         <columns>
           <TableColumn fx:id="id" prefWidth="75.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Id" />
           <TableColumn fx:id="name" prefWidth="187.20000457763672" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Name" />

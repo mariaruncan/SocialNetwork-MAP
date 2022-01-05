@@ -14,13 +14,14 @@ import javafx.stage.Stage;
 import socialnetwork.domain.Friendship;
 import socialnetwork.domain.User;
 import socialnetwork.domain.FriendDTO;
+import socialnetwork.domain.utils.Observer;
 import socialnetwork.service.Service;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-public class WelcomePageController {
+public class WelcomePageController implements Observer {
     @FXML
     private Label userLabel;
 
@@ -45,6 +46,7 @@ public class WelcomePageController {
     private Scene scene;
     private Parent root;
     private User user;
+    private  ObservableList<FriendDTO> friendList;
 
 
     private  void  displayName(){
@@ -61,14 +63,15 @@ public class WelcomePageController {
         name.setCellValueFactory(new PropertyValueFactory<FriendDTO,String>("name"));
         date.setCellValueFactory(new PropertyValueFactory<FriendDTO,Date>("date"));
 
-        ObservableList<FriendDTO> objects = FXCollections.observableArrayList();
+
         for(Friendship f : friends)
             if(f.getUser1().getId()== user.getId())
-                objects.add(new FriendDTO(f.getUser2().getId(),f.getUser2().getFirstName() + " " + f.getUser2().getLastName(), f.getDate()));
+                friendList.add(new FriendDTO(f.getUser2().getId(),f.getUser2().getFirstName() + " " + f.getUser2().getLastName(), f.getDate()));
             else
-                objects.add(new FriendDTO(f.getUser1().getId(),f.getUser1().getFirstName() + " " + f.getUser1().getLastName(), f.getDate()));
+                friendList.add(new FriendDTO(f.getUser1().getId(),f.getUser1().getFirstName() + " " + f.getUser1().getLastName(), f.getDate()));
 
-        tableView.setItems(objects);
+        tableView.setItems(friendList);
+        this.srv.addObserver(this);
 
     }
 
@@ -152,5 +155,18 @@ public class WelcomePageController {
 
     public void setService(Service service) {
         this.srv=service;
+        this.friendList=FXCollections.observableArrayList();
+    }
+
+    @Override
+    public void update() {
+        this.friendList.clear();
+        List<Friendship> friends = srv.reportUserFriends(user.getId());
+        for(Friendship f : friends)
+            if(f.getUser1().getId()== user.getId())
+                friendList.add(new FriendDTO(f.getUser2().getId(),f.getUser2().getFirstName() + " " + f.getUser2().getLastName(), f.getDate()));
+            else
+                friendList.add(new FriendDTO(f.getUser1().getId(),f.getUser1().getFirstName() + " " + f.getUser1().getLastName(), f.getDate()));
+
     }
 }

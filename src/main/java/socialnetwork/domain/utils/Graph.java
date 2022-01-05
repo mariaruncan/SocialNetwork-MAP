@@ -1,4 +1,4 @@
-package socialnetwork.utils;
+package socialnetwork.domain.utils;
 
 import java.util.*;
 

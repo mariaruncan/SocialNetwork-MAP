@@ -16,17 +16,20 @@ import javafx.stage.Stage;
 import socialnetwork.domain.FriendRequest;
 import socialnetwork.domain.FriendRequestDTO;
 import socialnetwork.domain.User;
+import socialnetwork.domain.utils.Observer;
 import socialnetwork.service.Service;
 
 import java.io.IOException;
 import java.util.List;
 
-public class SeeSentRequestsController {
+public class SeeSentRequestsController implements Observer {
     private Service srv;
     private Stage stage;
     private Scene scene;
     private Parent root;
     private User user;
+    private  ObservableList<FriendRequestDTO> requests;
+
 
     @FXML
     private TableColumn<FriendRequestDTO, String> name;
@@ -76,16 +79,17 @@ public class SeeSentRequestsController {
         name.setCellValueFactory(new PropertyValueFactory<FriendRequestDTO, String>("name"));
         status.setCellValueFactory(new PropertyValueFactory<FriendRequestDTO, String>("status"));
 
-        ObservableList<FriendRequestDTO> objects = FXCollections.observableArrayList();
         for(FriendRequest f : friendRequests)
-            objects.add(new FriendRequestDTO(f.getTo().getId(), f.getTo().getFirstName() + " " + f.getTo().getLastName(), f.getStatus()));
+            requests.add(new FriendRequestDTO(f.getTo().getId(), f.getTo().getFirstName() + " " + f.getTo().getLastName(), f.getStatus()));
 
-        tableView.setItems(objects);
+        tableView.setItems(requests);
+        this.srv.addObserver(this);
 
     }
 
     public void setService(Service srv) {
         this.srv = srv;
+        this.requests = FXCollections.observableArrayList();
         init();
     }
 
@@ -108,4 +112,12 @@ public class SeeSentRequestsController {
     }
 
 
+    @Override
+    public void update() {
+        this.requests.clear();
+        List<FriendRequest> friendRequests = srv.getUserSentFriendRequests(user.getId());
+        for(FriendRequest f : friendRequests)
+            requests.add(new FriendRequestDTO(f.getTo().getId(), f.getTo().getFirstName() + " " + f.getTo().getLastName(), f.getStatus()));
+
+    }
 }
