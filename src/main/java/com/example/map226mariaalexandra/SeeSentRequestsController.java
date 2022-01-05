@@ -93,11 +93,11 @@ public class SeeSentRequestsController {
         this.user = user;
     }
 
-    public void switchAddFriendPage(ActionEvent event) throws IOException {
+    public void switchWelcomePage(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("searchUsers.fxml"));
+        FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("welcomePage.fxml"));
         root=loader.load();
-        SearchUsersController controller = loader.getController();
+        WelcomePageController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(user);
         stage =(Stage)((Node)event.getSource()).getScene().getWindow();
