@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="249.0" prefWidth="406.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.AddFriendController">
+<AnchorPane prefHeight="249.0" prefWidth="406.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.SearchUsersController">
    <children>
       <SplitPane dividerPositions="0.6014851485148515" prefHeight="500.0" prefWidth="750.0" style="-fx-background-color: #9fc9b2;">
         <items>
@@ -32,7 +32,7 @@
                         <Image url="@../../../mint1.jpeg" />
                      </image>
                   </ImageView>
-                  <Label layoutX="105.0" layoutY="98.0" prefHeight="38.0" prefWidth="117.0" text="Add friends" textFill="#f7f7f7">
+                  <Label layoutX="100.0" layoutY="98.0" prefHeight="38.0" prefWidth="124.0" text="Search users" textFill="#f7f7f7">
                      <font>
                         <Font name="Century" size="20.0" />
                      </font>
@@ -44,7 +44,12 @@
                         <Font name="Century" size="13.0" />
                      </font>
                   </Button>
-                  <Button layoutX="138.0" layoutY="249.0" mnemonicParsing="false" onAction="#switchMainPage" style="-fx-background-color: #9fc9b2;" text="Back" textFill="#f7f7f7">
+                  <Button layoutX="138.0" layoutY="317.0" mnemonicParsing="false" onAction="#switchMainPage" style="-fx-background-color: #9fc9b2;" text="Back" textFill="#f7f7f7">
+                     <font>
+                        <Font name="Century" size="13.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="seeMessages" layoutX="112.0" layoutY="249.0" mnemonicParsing="false" onAction="#onSeeMessagesButtonClick" style="-fx-background-color: #9fc9b2;" text="See messages" textFill="#f7f7f7">
                      <font>
                         <Font name="Century" size="13.0" />
                      </font>

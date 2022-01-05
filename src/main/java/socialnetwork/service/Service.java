@@ -307,9 +307,15 @@ public class Service {
         return  list;
     }
 
+
+    public void sendMessage(Message m){
+        messageRepository.save(m);
+    }
+
     public void replyAll(Message m, User user, String reply) {
         ArrayList<User> toList = new ArrayList<User>();
-        toList.add(m.getFrom());
+        if(m.getFrom().getId() != user.getId())
+            toList.add(m.getFrom());
         for(User u : m.getTo())
             if(u.getId()!= user.getId())
                 toList.add(u);
@@ -320,5 +326,33 @@ public class Service {
 
     public Repository<Long, User> getUserRepo() {
         return this.usersRepo;
+    }
+
+    public List<FriendRequest> getUserSentFriendRequests(Long id) {
+        return StreamSupport.stream(friendRequestsRepo.findAll().spliterator(), false)
+                .filter(fr -> fr.getFrom().getId() == id)
+                .collect(Collectors.toList());
+    }
+
+    public FriendRequest removeFriendRequest(User from, User to) {
+        List<FriendRequest> requestList = getUserFriendRequests(to.getId())
+                .stream()
+                .filter(fr -> fr.getFrom().getId() == from.getId())
+                .collect(Collectors.toList());
+
+        if(requestList.isEmpty())
+            return null;
+
+        FriendRequest fr = requestList.get(0);
+        if(!fr.getStatus().matches("pending"))
+            return null;
+
+        fr=friendRequestsRepo.delete(new Tuple<User,User>(from,to));
+
+        return fr;
+    }
+
+    public Message getMessage(Long id){
+        return messageRepository.findOne(id);
     }
 }
