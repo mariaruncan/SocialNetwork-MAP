@@ -163,10 +163,10 @@ public class MessagesWithUserController implements Observer {
     }
 
     public void switchSearchUsersPage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("searchUsers.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("messenger.fxml"));
         root = loader.load();
 
-        SearchUsersController controller = loader.getController();
+        MessengerController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(userLogged);
         stage =(Stage)((Node)event.getSource()).getScene().getWindow();

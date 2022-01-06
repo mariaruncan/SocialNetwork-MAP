@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="249.0" prefWidth="406.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.SearchUsersController">
+<AnchorPane prefHeight="249.0" prefWidth="406.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.MessengerController">
    <children>
       <SplitPane dividerPositions="0.6014851485148515" prefHeight="500.0" prefWidth="750.0" style="-fx-background-color: #9fc9b2;">
         <items>

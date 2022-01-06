@@ -10,37 +10,36 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane onMouseClicked="#update" prefHeight="427.0" prefWidth="513.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.WelcomePageController">
+<AnchorPane onMouseClicked="#update" prefHeight="427.0" prefWidth="754.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.WelcomePageController">
    <children>
       <ImageView fitHeight="88.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../logo.jpeg" />
          </image>
       </ImageView>
-      <Label fx:id="userLabel" layoutX="99.0" layoutY="14.0" prefHeight="43.0" prefWidth="383.0" textFill="#f7f7f7">
+      <Label fx:id="userLabel" layoutX="99.0" layoutY="14.0" prefHeight="43.0" prefWidth="433.0" textFill="#f7f7f7">
          <font>
             <Font name="Century" size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="tableView" layoutX="3.0" layoutY="131.0" prefHeight="296.0" prefWidth="506.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;">
+      <TableView fx:id="tableFriends" layoutY="129.0" prefHeight="296.0" prefWidth="257.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;">
         <columns>
-          <TableColumn fx:id="id" prefWidth="75.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Id" />
-          <TableColumn fx:id="name" prefWidth="187.20000457763672" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Name" />
-            <TableColumn fx:id="date" prefWidth="240.00003051757812" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Friendship date" />
+          <TableColumn fx:id="Id" prefWidth="36.79998779296875" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Id" />
+            <TableColumn fx:id="Friends" prefWidth="218.4000068664551" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Friends" />
 
         </columns>
       </TableView>
-      <Button fx:id="seeRequestsButton" alignment="CENTER" layoutX="348.0" layoutY="98.0" mnemonicParsing="false" onAction="#onSeeRequestsButtonClick" prefHeight="31.0" prefWidth="162.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="See sent friend requests" textFill="WHITE">
+      <Button fx:id="seeRequestsButton" alignment="CENTER" layoutX="348.0" layoutY="98.0" mnemonicParsing="false" onAction="#onSeeRequestsButtonClick" prefHeight="31.0" prefWidth="153.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="See sent friend requests" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" layoutY="98.0" mnemonicParsing="false" onAction="#onAddFriendButtonClick" prefHeight="31.0" prefWidth="102.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Search users" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" layoutX="114.0" layoutY="98.0" mnemonicParsing="false" onAction="#onMessengerButtonClick" prefHeight="31.0" prefWidth="102.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Messenger" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" layoutX="101.0" layoutY="98.0" mnemonicParsing="false" onAction="#onRemoveFriendButtonClick" prefHeight="31.0" prefWidth="114.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Remove friend" textFill="WHITE">
+      <Button alignment="CENTER" layoutY="98.0" mnemonicParsing="false" onAction="#onRemoveFriendButtonClick" prefHeight="31.0" prefWidth="114.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Remove friend" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
@@ -50,11 +49,17 @@
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="logOut" layoutX="375.0" layoutY="57.0" mnemonicParsing="false" onAction="#switchToLogInPage" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;" text="Log out" textFill="#f7f7f7">
+      <Button fx:id="logOut" layoutX="524.0" layoutY="57.0" mnemonicParsing="false" onAction="#switchToLogInPage" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;" text="Log out" textFill="#f7f7f7">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
+      <TableView fx:id="tableInbox" layoutX="258.0" layoutY="129.0" prefHeight="296.0" prefWidth="270.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;">
+         <columns>
+            <TableColumn fx:id="From" prefWidth="108.79997253417969" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="From" />
+            <TableColumn fx:id="Inbox" prefWidth="157.5999755859375" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Inbox" />
+         </columns>
+      </TableView>
    </children>
    <opaqueInsets>
       <Insets />

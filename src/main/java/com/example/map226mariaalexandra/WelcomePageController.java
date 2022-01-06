@@ -11,15 +11,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import socialnetwork.domain.Friendship;
-import socialnetwork.domain.User;
-import socialnetwork.domain.FriendDTO;
+import socialnetwork.domain.*;
 import socialnetwork.domain.utils.Observer;
 import socialnetwork.service.Service;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 
 public class WelcomePageController implements Observer {
     @FXML
@@ -32,21 +28,27 @@ public class WelcomePageController implements Observer {
     public Button seeRequestsButton;
 
     @FXML
-    private  TableColumn<FriendDTO,Long> id;
+    private  TableColumn<FriendDTO,String> Friends;
     @FXML
-    private  TableColumn<FriendDTO,String> name;
+    private  TableColumn<FriendDTO,Long> Id;
     @FXML
-    private  TableColumn<FriendDTO,Date> date;
+    private  TableColumn<MessageDTO,String> From;
+    @FXML
+    private  TableColumn<MessageDTO,String> Inbox;
 
     @FXML
-    private TableView<FriendDTO> tableView;
+    private TableView<FriendDTO> tableFriends;
+    @FXML
+    private TableView<MessageDTO> tableInbox;
 
     private Service srv;
     private Stage stage;
     private Scene scene;
     private Parent root;
     private User user;
+    private Page page;
     private  ObservableList<FriendDTO> friendList;
+    private  ObservableList<MessageDTO> messageList;
 
 
     private  void  displayName(){
@@ -56,21 +58,23 @@ public class WelcomePageController implements Observer {
 
     @FXML
     public void showFriends(){
-        tableView.getItems().clear();
-        List<Friendship> friends = srv.reportUserFriends(user.getId());
+        tableFriends.getItems().clear();
+        Friends.setCellValueFactory(new PropertyValueFactory<FriendDTO,String>("name"));
+        Id.setCellValueFactory(new PropertyValueFactory<FriendDTO,Long>("id"));
+        for(User f : page.getFriends())
+                friendList.add(new FriendDTO(f.getId(),f.getFirstName() + " " + f.getLastName()));
+        tableFriends.setItems(friendList);
+        this.srv.addObserver(this);
 
-        id.setCellValueFactory(new PropertyValueFactory<FriendDTO,Long>("id"));
-        name.setCellValueFactory(new PropertyValueFactory<FriendDTO,String>("name"));
-        date.setCellValueFactory(new PropertyValueFactory<FriendDTO,Date>("date"));
-
-
-        for(Friendship f : friends)
-            if(f.getUser1().getId()== user.getId())
-                friendList.add(new FriendDTO(f.getUser2().getId(),f.getUser2().getFirstName() + " " + f.getUser2().getLastName(), f.getDate()));
-            else
-                friendList.add(new FriendDTO(f.getUser1().getId(),f.getUser1().getFirstName() + " " + f.getUser1().getLastName(), f.getDate()));
-
-        tableView.setItems(friendList);
+    }
+    @FXML
+    public void showInbox(){
+        tableInbox.getItems().clear();
+        From.setCellValueFactory(new PropertyValueFactory<MessageDTO,String>("from"));
+        Inbox.setCellValueFactory(new PropertyValueFactory<MessageDTO,String>("text"));
+        for(Message m : page.getReceivedMessages())
+                messageList.add(new MessageDTO(m));
+        tableInbox.setItems(messageList);
         this.srv.addObserver(this);
 
     }
@@ -100,12 +104,12 @@ public class WelcomePageController implements Observer {
         stage.show();
     }
 
-    public void onAddFriendButtonClick(ActionEvent event) throws IOException {
+    public void onMessengerButtonClick(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("searchUsers.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("messenger.fxml"));
         root = loader.load();
 
-        SearchUsersController controller = loader.getController();
+        MessengerController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(user);
         stage =(Stage)((Node)event.getSource()).getScene().getWindow();
@@ -124,13 +128,12 @@ public class WelcomePageController implements Observer {
     }
 
     public void onRemoveFriendButtonClick(){
-        if(tableView.getSelectionModel().getSelectedItem() == null) {
+        if(tableFriends.getSelectionModel().getSelectedItem() == null) {
             showAlert("Ops", "Please select a friend!");
             return;
         }
-        Long id = tableView.getSelectionModel().getSelectedItem().getId();
+        Long id = tableFriends.getSelectionModel().getSelectedItem().getId();
         srv.removeFriendship(user.getId(), id);
-        showFriends();
 
     }
 
@@ -149,24 +152,34 @@ public class WelcomePageController implements Observer {
 
     public void setUser(User userr) {
         this.user = userr;
+        user.setFriends(srv.reportUserFriends(user.getId()));
+        setPage();
         displayName();
         showFriends();
+        showInbox();
+    }
+
+    private void setPage() {
+        this.page= new Page(user.getFirstName(), user.getLastName(),user.getFriends(),srv.getInbox(user),srv.getUserFriendRequests(user.getId()));
     }
 
     public void setService(Service service) {
         this.srv=service;
         this.friendList=FXCollections.observableArrayList();
+        this.messageList=FXCollections.observableArrayList();
     }
 
     @Override
     public void update() {
         this.friendList.clear();
-        List<Friendship> friends = srv.reportUserFriends(user.getId());
-        for(Friendship f : friends)
-            if(f.getUser1().getId()== user.getId())
-                friendList.add(new FriendDTO(f.getUser2().getId(),f.getUser2().getFirstName() + " " + f.getUser2().getLastName(), f.getDate()));
-            else
-                friendList.add(new FriendDTO(f.getUser1().getId(),f.getUser1().getFirstName() + " " + f.getUser1().getLastName(), f.getDate()));
-
+        this.messageList.clear();
+        user.setFriends(srv.reportUserFriends(user.getId()));
+        page.setFriends(user.getFriends());
+        page.setReceivedMessages(srv.getInbox(user));
+        for(User f : page.getFriends())
+            friendList.add(new FriendDTO(f.getId(),f.getFirstName() + " " + f.getLastName()));
+        for(Message m : page.getReceivedMessages())
+            messageList.add(new MessageDTO(m));
     }
+
 }

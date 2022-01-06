@@ -1,11 +1,8 @@
 package socialnetwork.domain;
 
-import java.util.Date;
-
 public class FriendDTO {
-    private Long id;
     private String name;
-    private Date date;
+    private Long id;
 
     @Override
     public int hashCode() {
@@ -22,18 +19,10 @@ public class FriendDTO {
         return super.toString();
     }
 
-    public FriendDTO(Long id, String name, Date date) {
-        this.id = id;
+    public FriendDTO(Long id,String name) {
+
+        this.id=id;
         this.name = name;
-        this.date = date;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -44,11 +33,11 @@ public class FriendDTO {
         this.name = name;
     }
 
-    public Date getDate() {
-        return date;
+    public Long getId() {
+        return id;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

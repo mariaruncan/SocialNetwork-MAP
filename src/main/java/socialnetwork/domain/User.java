@@ -143,4 +143,12 @@ public class User extends Entity<Long>{
     public int hashCode() {
         return Objects.hash(getFirstName(), getLastName(), getFriends());
     }
+
+    public void setFriends(List<Friendship> friendships) {
+        this.friends.clear();
+        for(Friendship f : friendships)
+            if(f.getUser1().getId()==getId())
+                this.friends.add(f.getUser2());
+            else this.friends.add(f.getUser1());
+    }
 }
