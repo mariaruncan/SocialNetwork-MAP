@@ -1,8 +1,5 @@
 package com.example.map226mariaalexandra;
 
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import socialnetwork.domain.FriendRequest;
+import socialnetwork.domain.Message;
 import socialnetwork.domain.User;
 import socialnetwork.domain.UserDTO;
 import socialnetwork.domain.validators.ValidationException;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class MessengerController {
+public class SearchFriendsController {
     @FXML
     public TableView<UserDTO> tableView;
     @FXML
@@ -36,6 +38,8 @@ public class MessengerController {
     public TextField nameTextField;
     @FXML
     public Button sendButton;
+    @FXML
+    private ChoiceBox<Integer> monthChoiceBox;
 
 
     private Service srv;
@@ -56,6 +60,12 @@ public class MessengerController {
 
     private void init(){
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> showUsers());
+        initReport();
+    }
+    private void initReport(){
+        monthChoiceBox.setValue(1);
+        for(int i=1;i<=12;i++)
+            monthChoiceBox.getItems().add(i);
     }
 
     private void showUsers() {
@@ -147,5 +157,50 @@ public class MessengerController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+    public void generateRaport(ActionEvent event) throws IOException {
+        int month= monthChoiceBox.getValue();
+        if(tableView.getSelectionModel().getSelectedItem() == null){
+            showAlert("Ops", "Please select an user!");
+            return;
+        }
+
+        UserDTO friend = tableView.getSelectionModel().getSelectedItem();
+        try (PDDocument doc = new PDDocument()) {
+
+            PDPage myPage = new PDPage();
+            doc.addPage(myPage);
+            List<Message> messages = srv.reportUsersMessagesFriendMonth(user.getId(), friend.getId(), month).getRight();
+
+            try (PDPageContentStream cont = new PDPageContentStream(doc, myPage)) {
+
+                cont.beginText();
+
+                cont.setFont(PDType1Font.TIMES_ROMAN, 12);
+                cont.setLeading(14.5f);
+
+                cont.newLineAtOffset(25, 700);
+                String line1 = "The user "+user.getFirstName()+" "+user.getLastName()+" received the following messages from the user "+
+                        friend.getName()+" in the month"+String.valueOf(month)+ ":";
+                cont.showText(line1);
+                cont.newLine();
+                for(Message m : messages) {
+                    String line2 = m.getText()+";";
+                    cont.newLine();
+                    cont.showText(line2);
+                }
+                cont.newLine();
+                cont.endText();
+                System.out.println("finished");
+            }
+            catch(Exception ex){
+                System.out.println(ex.getMessage());
+            }
+
+            doc.save("src/main/resources/Messages from a friend report.pdf");
+        }
+
+
+
     }
 }

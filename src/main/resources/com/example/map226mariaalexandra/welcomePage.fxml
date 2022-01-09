@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -29,12 +30,12 @@
 
         </columns>
       </TableView>
-      <Button fx:id="seeRequestsButton" alignment="CENTER" layoutX="348.0" layoutY="98.0" mnemonicParsing="false" onAction="#onSeeRequestsButtonClick" prefHeight="31.0" prefWidth="153.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="See sent friend requests" textFill="WHITE">
+      <Button fx:id="seeRequestsButton" alignment="CENTER" layoutX="362.0" layoutY="98.0" mnemonicParsing="false" onAction="#onSeeRequestsButtonClick" prefHeight="31.0" prefWidth="166.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="See sent friend requests" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" layoutX="114.0" layoutY="98.0" mnemonicParsing="false" onAction="#onMessengerButtonClick" prefHeight="31.0" prefWidth="102.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Messenger" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" layoutX="114.0" layoutY="98.0" mnemonicParsing="false" onAction="#onMessengerButtonClick" prefHeight="31.0" prefWidth="114.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Search friends" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
@@ -44,12 +45,12 @@
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" layoutX="215.0" layoutY="98.0" mnemonicParsing="false" onAction="#switchToFriendRequestsPage" prefHeight="31.0" prefWidth="134.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="See friend requests" textFill="WHITE">
+      <Button alignment="CENTER" layoutX="228.0" layoutY="98.0" mnemonicParsing="false" onAction="#switchToFriendRequestsPage" prefHeight="31.0" prefWidth="134.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="See friend requests" textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="logOut" layoutX="524.0" layoutY="57.0" mnemonicParsing="false" onAction="#switchToLogInPage" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;" text="Log out" textFill="#f7f7f7">
+      <Button fx:id="logOut" layoutX="597.0" layoutY="18.0" mnemonicParsing="false" onAction="#switchToLogInPage" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;" text="Log out" textFill="#f7f7f7">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
@@ -60,6 +61,8 @@
             <TableColumn fx:id="Inbox" prefWidth="157.5999755859375" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Inbox" />
          </columns>
       </TableView>
+      <Button fx:id="reportButton" layoutX="600.0" layoutY="63.0" mnemonicParsing="false" onAction="#generateRaport" prefHeight="26.0" prefWidth="149.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Recent activities report" textFill="WHITE" />
+      <ChoiceBox fx:id="monthChoiceBox" layoutX="533.0" layoutY="63.0" prefHeight="26.0" prefWidth="58.0" style="-fx-background-color: #397563; -fx-border-color: black;" />
    </children>
    <opaqueInsets>
       <Insets />

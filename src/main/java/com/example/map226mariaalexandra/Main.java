@@ -19,9 +19,9 @@ import socialnetwork.service.Service;
 public class Main {
 
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/SocialNetwork";
+        String url = "jdbc:postgresql://localhost:5432/Lab4";
         String username = "postgres";
-        String password = "postgres";
+        String password = "parola";
 
         Repository<Long, User> userRepo = new UserDbRepository(url, username, password, new UserValidator());
         Repository<Tuple<User, User>, Friendship> friendshipRepository = new FriendshipDbRepository(url, username,
