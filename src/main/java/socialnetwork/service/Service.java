@@ -189,7 +189,6 @@ public class Service implements Observable {
         List<User> list = StreamSupport.stream(friendshipsRepo.findAll().spliterator(), false)
                 .filter(f -> f.getUser1().getId() == id || f.getUser2().getId() == id)
                 .filter(f -> {
-                    System.out.println(f.getDate());
                     return f.getDate().toString().matches(regex);
                 })
                 .map(f -> {
@@ -198,6 +197,23 @@ public class Service implements Observable {
                     else
                         return f.getUser1();
                 })
+                .collect(Collectors.toList());
+        return new Tuple<>(user, list);
+    }
+
+    public Tuple<User, List<Message>> reportUsersMessagesMonth(Long id, Integer month){
+        User user = usersRepo.findOne(id);
+        List<Message> list = StreamSupport.stream(getInbox(user).spliterator(), false)
+                .filter(m -> m.getDate().getMonth().getValue()==month)
+                .collect(Collectors.toList());
+        return new Tuple<>(user, list);
+    }
+
+    public Tuple<User, List<Message>> reportUsersMessagesFriendMonth(Long id, Long idFriend,Integer month){
+        User user = usersRepo.findOne(id);
+        List<Message> list = StreamSupport.stream(getInbox(user).spliterator(), false)
+                .filter(m -> m.getDate().getMonth().getValue()==month)
+                .filter(m -> m.getFrom().getId()==idFriend)
                 .collect(Collectors.toList());
         return new Tuple<>(user, list);
     }

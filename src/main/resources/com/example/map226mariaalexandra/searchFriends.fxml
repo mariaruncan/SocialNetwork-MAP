@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="249.0" prefWidth="406.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.MessengerController">
+<AnchorPane prefHeight="249.0" prefWidth="406.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.SearchFriendsController">
    <children>
       <SplitPane dividerPositions="0.6014851485148515" prefHeight="500.0" prefWidth="750.0" style="-fx-background-color: #9fc9b2;">
         <items>
@@ -54,6 +55,8 @@
                         <Font name="Century" size="13.0" />
                      </font>
                   </Button>
+                  <ChoiceBox fx:id="monthChoiceBox" layoutX="29.0" layoutY="283.0" prefHeight="26.0" prefWidth="58.0" style="-fx-background-color: #9fc9b2;" />
+                  <Button fx:id="reportButton" layoutX="100.0" layoutY="283.0" mnemonicParsing="false" onAction="#generateRaport" prefHeight="26.0" prefWidth="149.0" style="-fx-background-color: #9fc9b2;" text="Recent activities report" textFill="WHITE" />
                </children>
             </AnchorPane>
         </items>
