@@ -123,7 +123,6 @@ public class WelcomePageController implements Observer {
         root = loader.load();
 
         LogInController controller = loader.getController();
-        controller.setRepo(srv.getUserRepo());
         stage =(Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

@@ -6,19 +6,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import socialnetwork.domain.*;
-import socialnetwork.domain.validators.UserValidator;
-import socialnetwork.repository.database.db.*;
 
 import java.io.IOException;
 
 public class SocialNetworkApplication extends Application {
+
     public static void main(String[] args) {
         launch();
     }
-
-    private Repository<Long, User> userRepo = new UserDbRepository("jdbc:postgresql://localhost:5432/SocialNetwork",
-           "postgres", "postgres",new UserValidator());
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -26,7 +21,7 @@ public class SocialNetworkApplication extends Application {
         Parent root = fxmlLoaderA.load();
         stage.setTitle("MINT");
         LogInController ctrl = fxmlLoaderA.getController();
-        ctrl.setRepo(userRepo);
+        ctrl.init();
         Scene scene = new Scene(root);
         Image icon = new Image("/logo.jpeg");
         stage.getIcons().add(icon);
