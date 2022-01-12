@@ -118,6 +118,8 @@ public class MessagesWithUserController implements Observer {
             return;
         }
 
+        textField.setText("");
+
         List<User> toList = new ArrayList<>();
         toList.add(userMessaged);
         srv.sendMessage(new Message(userLogged, toList, text));
@@ -134,6 +136,8 @@ public class MessagesWithUserController implements Observer {
             showAlert("Ops", "Please write message text!");
             return;
         }
+
+        textField.setText("");
 
         Long id = tableView.getSelectionModel().getSelectedItem().getId();
 
@@ -155,6 +159,8 @@ public class MessagesWithUserController implements Observer {
             showAlert("Ops", "Please write message text!");
             return;
         }
+
+        textField.setText("");
 
         Long id = tableView.getSelectionModel().getSelectedItem().getId();
         Message msg = srv.getMessage(id);
