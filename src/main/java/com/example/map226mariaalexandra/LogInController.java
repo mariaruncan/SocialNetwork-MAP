@@ -13,10 +13,7 @@ import javafx.stage.Stage;
 import socialnetwork.domain.*;
 import socialnetwork.domain.validators.FriendRequestValidator;
 import socialnetwork.domain.validators.FriendshipValidator;
-import socialnetwork.repository.database.db.FriendRequestDbRepository;
-import socialnetwork.repository.database.db.FriendshipDbRepository;
-import socialnetwork.repository.database.db.MessageDbRepository;
-import socialnetwork.repository.database.db.Repository;
+import socialnetwork.repository.database.db.*;
 import socialnetwork.service.Service;
 
 import java.io.IOException;
@@ -48,17 +45,18 @@ public class LogInController {
             return;
         }
 
-        String url = "jdbc:postgresql://localhost:5432/Lab4";
+        String url = "jdbc:postgresql://localhost:5432/SocialNetwork";
         String username = "postgres";
-        String password = "parola";
+        String password = "postgres";
 
         Repository<Tuple<User, User>, Friendship> friendshipRepository = new FriendshipDbRepository(url, username,
                 password, new FriendshipValidator());
         Repository<Tuple<User, User>, FriendRequest> friendRequestRepository = new FriendRequestDbRepository(url,
                 username, password,new FriendRequestValidator());
         Repository<Long, Message> messageRepo = new MessageDbRepository(url, username, password, userRepo);
+        EventDbRepository eventRepo = new EventDbRepository(url, username, password, userRepo);
 
-        Service service = new Service(userRepo, friendshipRepository, messageRepo, friendRequestRepository);
+        Service service = new Service(userRepo, friendshipRepository, messageRepo, friendRequestRepository, eventRepo);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("welcomePage.fxml"));
         root = loader.load();
@@ -70,6 +68,7 @@ public class LogInController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        controller.notifyEvents();
     }
 
     private void init() {

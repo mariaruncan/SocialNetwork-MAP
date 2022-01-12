@@ -6,11 +6,7 @@ import socialnetwork.domain.Message;
 import socialnetwork.domain.Tuple;
 import socialnetwork.domain.User;
 import socialnetwork.domain.validators.FriendRequestValidator;
-import socialnetwork.repository.database.db.FriendRequestDbRepository;
-import socialnetwork.repository.database.db.FriendshipDbRepository;
-import socialnetwork.repository.database.db.MessageDbRepository;
-import socialnetwork.repository.database.db.Repository;
-import socialnetwork.repository.database.db.UserDbRepository;
+import socialnetwork.repository.database.db.*;
 import socialnetwork.ui.Ui;
 import socialnetwork.domain.validators.FriendshipValidator;
 import socialnetwork.domain.validators.UserValidator;
@@ -29,8 +25,9 @@ public class Main {
         Repository<Tuple<User, User>, FriendRequest> friendRequestRepository = new FriendRequestDbRepository(url,
                 username, password,new FriendRequestValidator());
         Repository<Long, Message> messageRepo = new MessageDbRepository(url, username, password,userRepo);
+        EventDbRepository eventRepo = new EventDbRepository(url, username, password, userRepo);
 
-        Service service = new Service(userRepo,friendshipRepository,messageRepo, friendRequestRepository);
+        Service service = new Service(userRepo,friendshipRepository,messageRepo, friendRequestRepository, eventRepo);
 
         Ui ui = new Ui(service);
         ui.run();

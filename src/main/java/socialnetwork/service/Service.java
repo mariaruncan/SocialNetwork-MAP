@@ -1,14 +1,12 @@
 package socialnetwork.service;
 
-import socialnetwork.domain.FriendRequest;
-import socialnetwork.domain.Friendship;
-import socialnetwork.domain.Message;
-import socialnetwork.domain.Tuple;
-import socialnetwork.domain.User;
+import socialnetwork.domain.*;
 import socialnetwork.domain.utils.Observable;
+import socialnetwork.repository.database.db.EventDbRepository;
 import socialnetwork.repository.database.db.Repository;
 import socialnetwork.domain.utils.Graph;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +23,7 @@ public class Service implements Observable {
     private final Repository<Tuple<User, User>, Friendship> friendshipsRepo;
     private final Repository<Tuple<User, User>, FriendRequest> friendRequestsRepo;
     private final Repository<Long, Message> messageRepository;
+    private final EventDbRepository eventRepository;
 
     /**
      * constructor
@@ -33,11 +32,13 @@ public class Service implements Observable {
      */
 
     public Service(Repository<Long, User> usersRepo, Repository<Tuple<User, User>, Friendship> friendshipsRepo,
-                Repository<Long, Message> messageRepository, Repository<Tuple<User, User>, FriendRequest> friendRequestsRepository) {
+                Repository<Long, Message> messageRepository, Repository<Tuple<User, User>, FriendRequest> friendRequestsRepository,
+                EventDbRepository eventRepository) {
         this.usersRepo = usersRepo;
         this.friendshipsRepo = friendshipsRepo;
         this.messageRepository = messageRepository;
         this.friendRequestsRepo = friendRequestsRepository;
+        this.eventRepository = eventRepository;
     }
 
     /**
@@ -384,5 +385,22 @@ public class Service implements Observable {
 
     public Message getMessage(Long id){
         return messageRepository.findOne(id);
+    }
+
+    public Event addEvent(String name, LocalDate date){
+        Event event = new Event(name, date);
+        return eventRepository.save(event);
+    }
+
+    public Iterable<Event> findAllEvents(){
+        return eventRepository.findAll();
+    }
+
+    public void subscribeToEvent(Long eventId, Long userId){
+        eventRepository.subscribe(eventId, userId);
+    }
+
+    public void unsubscribeFromEvent(Long eventId, Long userId){
+        eventRepository.unsubscribe(eventId, userId);
     }
 }
