@@ -1,5 +1,7 @@
 package socialnetwork.domain;
 
+import javafx.scene.control.ListView;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -8,7 +10,8 @@ public class Page {
     private String lastName;
     private List<User> friends;
     private List<Message> receivedMessages;
-    private  List<FriendRequest> requests;
+    private List<FriendRequest> requests;
+    private List<Event> eventList;
 
     @Override
     public String toString() {
@@ -18,15 +21,18 @@ public class Page {
                 ", friends=" + friends +
                 ", receivedMessages=" + receivedMessages +
                 ", requests=" + requests +
+                ", eventList=" + eventList +
                 '}';
     }
 
-    public Page(String firstName, String lastName, List<User> friends, List<Message> receivedMessages, List<FriendRequest> requests) {
+    public Page(String firstName, String lastName, List<User> friends, List<Message> receivedMessages,
+                List<FriendRequest> requests, List<Event> eventList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.friends = friends;
         this.receivedMessages = receivedMessages;
         this.requests = requests;
+        this.eventList = eventList;
     }
 
     public String getFirstName() {
@@ -80,5 +86,13 @@ public class Page {
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, friends, receivedMessages, requests);
+    }
+
+    public List<Event> getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(List<Event> eventList) {
+        this.eventList = eventList;
     }
 }
