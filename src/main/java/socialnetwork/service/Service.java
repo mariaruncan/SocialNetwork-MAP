@@ -389,7 +389,9 @@ public class Service implements Observable {
 
     public Event addEvent(String name, LocalDate date){
         Event event = new Event(name, date);
-        return eventRepository.save(event);
+        Event event1 = eventRepository.save(event);
+        this.update();
+        return event1;
     }
 
     public Iterable<Event> findAllEvents(){
@@ -398,9 +400,11 @@ public class Service implements Observable {
 
     public void subscribeToEvent(Long eventId, Long userId){
         eventRepository.subscribe(eventId, userId);
+        this.update();
     }
 
     public void unsubscribeFromEvent(Long eventId, Long userId){
         eventRepository.unsubscribe(eventId, userId);
+        this.update();
     }
 }
