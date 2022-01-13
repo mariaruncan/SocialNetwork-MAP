@@ -4,6 +4,8 @@ package socialnetwork.repository.database.db;
 import socialnetwork.domain.Entity;
 import socialnetwork.domain.validators.ValidationException;
 
+import java.util.ArrayList;
+
 public interface Repository<ID, E extends Entity<ID>> {
 
     int size();
@@ -68,4 +70,7 @@ public interface Repository<ID, E extends Entity<ID>> {
      */
     E update(E entity);
 
+    public default Iterable<E> findAllPagination(int t,Long id1, Long id2){
+        return new  ArrayList();
+    };
 }

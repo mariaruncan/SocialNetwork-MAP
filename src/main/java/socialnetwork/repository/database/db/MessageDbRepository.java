@@ -88,7 +88,6 @@ public class MessageDbRepository implements  Repository<Long, Message> {
         }
         return message;
     } catch(SQLException e){
-        //e.printStackTrace();
         return null;
     }
 
@@ -133,7 +132,54 @@ public class MessageDbRepository implements  Repository<Long, Message> {
             }
             return mesaje;
         } catch (SQLException e) {
-            //e.printStackTrace();
+            return mesaje;
+        }
+    }
+
+    @Override
+    public Iterable<Message> findAllPagination(int t,Long id1,Long id2) {
+        ArrayList<Message> mesaje = new ArrayList<>();
+        try (Connection connection = getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement("SELECT * from message where fromm =? or fromm =? order by id limit ? offset ?");
+             PreparedStatement statement1 = connection.prepareStatement("SELECT * from replyto WHERE id_msg=?");
+             ) {
+
+            statement.setLong(1, id1);
+            statement.setLong(2, id2);
+            statement.setInt(3, 5);
+            statement.setInt(4, (t-1)*5);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Long Id = resultSet.getLong("id");
+                statement1.setLong(1, Id);
+                Long utilizator = resultSet.getLong("fromm");
+                String msg = resultSet.getString("text");
+                Date date = resultSet.getDate("date");
+                Time time = resultSet.getTime("time");
+                Long IdReply = resultSet.getLong("reply");
+                LocalDateTime datetime = LocalDateTime.of(date.toLocalDate(),time.toLocalTime());
+                User utilizatorfinal = null;
+                List<User> destinatoriList = new ArrayList<>();
+                Message reply = findOne(IdReply);
+                for (User u:utilizatori) {
+                    if(u.getId()==utilizator)
+                        utilizatorfinal=u;
+                }
+                ResultSet resultSet1 = statement1.executeQuery();
+                while (resultSet1.next()){
+                    for (User u : utilizatori) {
+                        if (u.getId() == resultSet1.getLong("touser"))
+                            destinatoriList.add(u);
+                    }
+                }
+                Message message= new Message(utilizatorfinal,destinatoriList,msg);
+                message.setId(Id);
+                message.setDate(datetime);
+                message.setReply(reply);
+                mesaje.add(message);
+            }
+            return mesaje;
+        } catch (SQLException e) {
             return mesaje;
         }
     }
@@ -158,12 +204,6 @@ public class MessageDbRepository implements  Repository<Long, Message> {
                 ps.setNull(5,Types.DOUBLE);
             ps.executeUpdate();
 
-           // statement.setLong(1, entity.getFrom().getId());
-           // statement.setString(2,entity.getText());
-            //if(entity.getReply()!=null)
-             //   statement.setLong(3,entity.getReply().getId());
-           // else
-              //  statement.setNull(3,Types.DOUBLE);
             ResultSet resultSet = statement.executeQuery();
             Long Id=null;
             while (resultSet.next()) {

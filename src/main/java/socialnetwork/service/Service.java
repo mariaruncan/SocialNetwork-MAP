@@ -325,6 +325,26 @@ public class Service implements Observable {
         }
         return  list;
     }
+    public List<Message> getChatsPagination(Long id1, Long id2,int t) {
+        List<Message> list = new ArrayList<Message>();
+        for (Message m: messageRepository.findAllPagination(t,id1,id2)) {
+            if(m.getFrom().getId()==id1)
+            {
+                for (User u: m.getTo()) {
+                    if(u.getId()==id2)
+                        list.add(m);
+                }
+            }
+            if(m.getFrom().getId()==id2)
+            {
+                for (User u: m.getTo()) {
+                    if(u.getId()==id1)
+                        list.add(m);
+                }
+            }
+        }
+        return  list;
+    }
     public List<Message> getInbox(User user) {
         List<Message> list = new ArrayList<Message>();
         for (Message m: messageRepository.findAll()) {
@@ -407,4 +427,5 @@ public class Service implements Observable {
         eventRepository.unsubscribe(eventId, userId);
         this.update();
     }
+
 }

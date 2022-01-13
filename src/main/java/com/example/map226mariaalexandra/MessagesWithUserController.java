@@ -48,6 +48,8 @@ public class MessagesWithUserController implements Observer {
     public Button replyAllButton;
     @FXML
     public Label titleLabel;
+    @FXML
+    public Button nextButton;
 
 
     private Service srv;
@@ -57,6 +59,7 @@ public class MessagesWithUserController implements Observer {
     private User userLogged;
     private User userMessaged;
     private ObservableList<MessageDTO> messages;
+    private int t=1;//page number
 
     public void setService(Service srv) {
         this.srv = srv;
@@ -66,7 +69,7 @@ public class MessagesWithUserController implements Observer {
 
     private void init(){
         titleLabel.setText("Messages with " + userMessaged.getFirstName() + " " + userMessaged.getLastName());
-        showMessages();
+        showMessages(1);
     }
 
     private void showAlert(String title, String msg){
@@ -77,7 +80,7 @@ public class MessagesWithUserController implements Observer {
         alert.showAndWait();
     }
 
-    private void showMessages(){
+    private void showMessages(int t){
         tableView.getItems().clear();
 
         id.setCellValueFactory(new PropertyValueFactory<MessageDTO, Long>("id"));
@@ -87,7 +90,7 @@ public class MessagesWithUserController implements Observer {
         date.setCellValueFactory(new PropertyValueFactory<MessageDTO, LocalDateTime>("date"));
         reply.setCellValueFactory(new PropertyValueFactory<MessageDTO, String>("reply"));
 
-        for(Message m : srv.getChats(userLogged.getId(), userMessaged.getId()))
+        for(Message m : srv.getChatsPagination(userLogged.getId(), userMessaged.getId(),t))
             messages.add(new MessageDTO(m));
         tableView.setItems(messages);
         this.srv.addObserver(this);
@@ -123,6 +126,16 @@ public class MessagesWithUserController implements Observer {
         List<User> toList = new ArrayList<>();
         toList.add(userMessaged);
         srv.sendMessage(new Message(userLogged, toList, text));
+    }
+    public void nextPage(ActionEvent actionEvent) {
+        t++;
+        showMessages(t);
+
+    }
+    public void previousPage(ActionEvent actionEvent) {
+        t--;
+        showMessages(t);
+
     }
 
     public void onButtonReplyClick(ActionEvent actionEvent) {
