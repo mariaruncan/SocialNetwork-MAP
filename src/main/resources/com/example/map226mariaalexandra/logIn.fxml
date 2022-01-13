@@ -32,11 +32,13 @@
          </font>
       </Label>
       <PasswordField fx:id="passwordField" layoutX="100.0" layoutY="223.0" prefHeight="26.0" prefWidth="176.0" promptText="password" />
-      <Button layoutX="117.0" layoutY="273.0" mnemonicParsing="false" onAction="#switchToWelcomePage" text="Log in" textFill="#44734d">
+      <Button layoutX="141.0" layoutY="271.0" mnemonicParsing="false" onAction="#switchToWelcomePage" text="Log in" textFill="#44734d">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Button>
       <TextField fx:id="usernameTextField" layoutX="101.0" layoutY="186.0" prefHeight="26.0" prefWidth="176.0" />
+      <Label layoutX="109.0" layoutY="319.0" text="No account?" textFill="WHITE" />
+      <Label layoutX="180.0" layoutY="319.0" onMouseClicked="#switchCreateAccount" text="Create one!" textFill="#9fffdd" />
    </children>
 </AnchorPane>

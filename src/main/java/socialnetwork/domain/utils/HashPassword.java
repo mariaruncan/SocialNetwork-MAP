@@ -1,5 +1,7 @@
 package socialnetwork.domain.utils;
 
+import socialnetwork.domain.validators.ValidationException;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -21,5 +23,12 @@ public class HashPassword {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static void validate(String password, String rePassword) {
+        if(password.length() < 8)
+            throw new ValidationException("Password length must be grater than 8!");
+        if(!password.equals(rePassword))
+            throw new ValidationException("Passwords must be the same!");
     }
 }
