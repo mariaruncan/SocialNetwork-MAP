@@ -41,4 +41,19 @@ public class LogInDbRepository {
             return null;
         }
     }
+
+    public LogInCredentials save(LogInCredentials entity){
+        String sql = "INSERT INTO logins(user_id,username,hashed_password) VALUES (?,?,?)";
+        try(Connection connection = getConnection(url, username,password);
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, entity.getId());
+            ps.setString(2, entity.getUsername());
+            ps.setString(3, entity.getHashedPassword());
+            ps.executeUpdate();
+            return entity;
+        } catch (SQLException throwables) {
+            //throwables.printStackTrace();
+            return null;
+        }
+    }
 }

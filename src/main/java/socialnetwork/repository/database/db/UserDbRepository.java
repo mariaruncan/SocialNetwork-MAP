@@ -104,6 +104,12 @@ public class UserDbRepository implements Repository<Long, User> {
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
             ps.executeUpdate();
+
+            try(PreparedStatement ps1 = connection.prepareStatement("SELECT MAX(id) FROM users")){
+                ResultSet resultSet = ps1.executeQuery();
+                while(resultSet.next())
+                    entity.setId(resultSet.getLong(1));
+            }
             return entity;
         } catch (SQLException e) {
             return null;

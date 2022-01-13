@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import socialnetwork.domain.*;
 import socialnetwork.domain.utils.HashPassword;
@@ -95,4 +96,16 @@ public class LogInController {
         this.srv = new Service(userRepo, friendshipRepository, messageRepo, friendRequestRepository, eventRepo);
     }
 
+    public void switchCreateAccount(MouseEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("signUp.fxml"));
+        root = loader.load();
+
+        SignUpController controller = loader.getController();
+        controller.setSrv(this.srv);
+        controller.setLogInRepo(this.logInRepo);
+        stage =(Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }
