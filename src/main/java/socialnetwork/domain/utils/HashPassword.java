@@ -26,8 +26,8 @@ public class HashPassword {
     }
 
     public static void validate(String password, String rePassword) {
-        if(password.length() < 8)
-            throw new ValidationException("Password length must be grater than 8!");
+        if(password.length() < 4)
+            throw new ValidationException("Password length must be grater than 4!");
         if(!password.equals(rePassword))
             throw new ValidationException("Passwords must be the same!");
     }

@@ -77,9 +77,9 @@ public class LogInController {
     }
 
     public void init() {
-        String urlPostgres = "jdbc:postgresql://localhost:5432/SocialNetwork";
+        String urlPostgres = "jdbc:postgresql://localhost:5432/Lab4";
         String usernamePostgres = "postgres";
-        String passwordPostgres = "postgres";
+        String passwordPostgres = "parola";
 
         this.logInRepo = new LogInDbRepository(urlPostgres, usernamePostgres, passwordPostgres);
 
