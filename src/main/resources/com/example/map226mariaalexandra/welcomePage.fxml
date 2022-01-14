@@ -5,9 +5,11 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -20,7 +22,7 @@
    <ImageView fitHeight="88.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
       <Image url="@../../../logo.jpeg" />
    </ImageView>
-   <Label fx:id="userLabel" layoutX="99.0" layoutY="14.0" prefHeight="43.0" prefWidth="433.0" textFill="#f7f7f7">
+   <Label fx:id="userLabel" layoutX="92.0" layoutY="14.0" prefHeight="43.0" prefWidth="437.0" textFill="#f7f7f7">
       <font>
          <Font name="Century" size="20.0" />
       </font>
@@ -52,12 +54,20 @@
          <Font name="System Italic" size="14.0" />
       </font>
    </Button>
+   <ImageView fitHeight="427.0" fitWidth="270.0" focusTraversable="true" layoutX="530.0" layoutY="-4.0" opacity="0.6" pickOnBounds="true">
+      <image>
+         <Image url="@../../../patt2.jpg" />
+      </image>
+      <effect>
+         <GaussianBlur />
+      </effect>
+   </ImageView>
    <Button layoutX="665.0" layoutY="18.0" mnemonicParsing="false" onAction="#switchToLogInPage" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;" text="Log out" textFill="#f7f7f7">
       <font>
          <Font name="System Bold" size="15.0" />
       </font>
    </Button>
-   <TableView fx:id="tableInbox" layoutX="258.0" layoutY="129.0" prefHeight="296.0" prefWidth="270.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;">
+   <TableView fx:id="tableInbox" layoutX="258.0" layoutY="129.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="296.0" prefWidth="270.0" style="-fx-background-color: #9fc9b2; -fx-border-color: black;">
       <columns>
          <TableColumn fx:id="from" prefWidth="108.79997253417969" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="From" />
          <TableColumn fx:id="inbox" prefWidth="157.5999755859375" style="-fx-background-color: #9fc9b2; -fx-border-color: black -fx-box-border black black ;" text="Inbox" />
@@ -76,4 +86,5 @@
       </columns>
    </TableView>
    <Button layoutX="625.0" layoutY="172.0" mnemonicParsing="false" onAction="#onSubUnsubButtonClicked" prefHeight="27.0" prefWidth="160.0" style="-fx-background-color: #397563; -fx-border-color: black;" text="Subscribe/Unsubscribe" textFill="WHITE" />
+   <Separator layoutX="523.0" orientation="VERTICAL" prefHeight="428.0" prefWidth="18.0" />
 </AnchorPane>

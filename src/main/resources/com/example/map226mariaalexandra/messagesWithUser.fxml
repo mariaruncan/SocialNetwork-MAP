@@ -15,7 +15,7 @@
    <children>
       <SplitPane dividerPositions="0.6662404092071611" prefHeight="350.0" prefWidth="940.0" style="-fx-background-color: #9fc9b2;">
          <items>
-            <AnchorPane onMouseClicked="#refreshTable" prefHeight="398.0" prefWidth="278.0" style="-fx-background-color: #45a583;">
+            <AnchorPane onMouseClicked="#refreshTable" prefHeight="352.0" prefWidth="310.0" style="-fx-background-color: #45a583;">
                <children>
                   <ImageView fitHeight="166.0" fitWidth="203.0" layoutX="1.0" layoutY="-26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -52,27 +52,32 @@
             </AnchorPane>
             <AnchorPane prefHeight="356.0" prefWidth="622.0" style="-fx-background-color: #9fc9b2;">
                <children>
-                  <TableView fx:id="tableView" layoutY="70.0" prefHeight="231.0" prefWidth="622.0">
+                  <ImageView fitHeight="355.0" fitWidth="656.0" layoutX="-15.0" layoutY="-3.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../../../patt4.jpg" />
+                     </image>
+                  </ImageView>
+                  <TableView fx:id="tableView" layoutY="70.0" prefHeight="231.0" prefWidth="638.0">
                     <columns>
                       <TableColumn fx:id="id" prefWidth="23.200012266635895" style="-fx-background-color: #9fc9b2;" text="id" />
                       <TableColumn fx:id="from" prefWidth="85.5999755859375" style="-fx-background-color: #9fc9b2;" text="from" />
                         <TableColumn fx:id="to" prefWidth="230.40005493164062" style="-fx-background-color: #9fc9b2;" text="to" />
                         <TableColumn fx:id="text" prefWidth="123.20001220703125" style="-fx-background-color: #9fc9b2;" text="text" />
                         <TableColumn fx:id="date" minWidth="0.0" prefWidth="116.79998779296875" style="-fx-background-color: #9fc9b2;" text="date" />
-                        <TableColumn fx:id="reply" prefWidth="43.199951171875" style="-fx-background-color: #9fc9b2;" text="reply" />
+                        <TableColumn fx:id="reply" prefWidth="54.4000244140625" style="-fx-background-color: #9fc9b2;" text="reply" />
                     </columns>
                   </TableView>
-                  <Button fx:id="previousPage" layoutX="7.0" layoutY="308.0" mnemonicParsing="false" onAction="#previousPage" prefHeight="26.0" prefWidth="147.0" style="-fx-background-color: #45a583;" text="Previous">
+                  <Button fx:id="previousPage" layoutX="7.0" layoutY="308.0" mnemonicParsing="false" onAction="#previousPage" prefHeight="26.0" prefWidth="147.0" style="-fx-background-color: #9fc9b2; -fx-border-color: white;" text="Previous">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                  <Button fx:id="nextButton" layoutX="475.0" layoutY="308.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="26.0" prefWidth="132.0" style="-fx-background-color: #45a583;" text="Next">
+                  <Button fx:id="nextButton" layoutX="492.0" layoutY="308.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="26.0" prefWidth="132.0" style="-fx-background-color: #9fc9b2; -fx-border-color: white;" text="Next">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                  <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="21.0" prefHeight="38.0" prefWidth="490.0" textFill="#f7f7f7">
+                  <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="21.0" prefHeight="38.0" prefWidth="529.0" textFill="#45a583">
                      <font>
-                        <Font name="Century" size="22.0" />
+                        <Font name="Century" size="24.0" />
                      </font>
                   </Label>
                </children>

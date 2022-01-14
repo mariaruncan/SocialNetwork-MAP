@@ -4,17 +4,36 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="366.0" prefWidth="302.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.LogInController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="366.0" prefWidth="320.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.LogInController">
    <children>
       <ImageView fitHeight="187.0" fitWidth="191.0" layoutX="63.0" layoutY="-48.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../mint1.jpeg" />
          </image>
+      </ImageView>
+      <ImageView fitHeight="239.0" fitWidth="295.0" layoutX="13.0" layoutY="109.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../patt4.jpg" />
+         </image>
+         <effect>
+            <BoxBlur height="83.41" iterations="3" width="191.25">
+               <input>
+                  <Shadow>
+                     <color>
+                        <Color red="0.057992201298475266" green="0.06315789371728897" blue="0.057309940457344055" opacity="0.9599999785423279" />
+                     </color>
+                  </Shadow>
+               </input>
+            </BoxBlur>
+         </effect>
       </ImageView>
       <Label contentDisplay="CENTER" layoutX="128.0" layoutY="106.0" prefHeight="66.0" prefWidth="94.0" text="Log in" textFill="#f0eded">
          <font>
