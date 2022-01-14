@@ -1,13 +1,14 @@
 package com.example.map226mariaalexandra;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import socialnetwork.domain.*;
@@ -77,9 +78,9 @@ public class LogInController {
     }
 
     public void init() {
-        String urlPostgres = "jdbc:postgresql://localhost:5432/SocialNetwork";
+        String urlPostgres = "jdbc:postgresql://localhost:5432/Lab4";
         String usernamePostgres = "postgres";
-        String passwordPostgres = "postgres";
+        String passwordPostgres = "parola";
 
         this.logInRepo = new LogInDbRepository(urlPostgres, usernamePostgres, passwordPostgres);
 

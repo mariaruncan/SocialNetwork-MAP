@@ -140,18 +140,21 @@ public class MessageDbRepository implements  Repository<Long, Message> {
     public Iterable<Message> findAllPagination(int t,Long id1,Long id2) {
         ArrayList<Message> mesaje = new ArrayList<>();
         try (Connection connection = getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * from message where fromm =? or fromm =? order by id limit ? offset ?");
-             PreparedStatement statement1 = connection.prepareStatement("SELECT * from replyto WHERE id_msg=?");
-             ) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * from message m inner join replyto r on m.id=r.id_msg\n" +
+                     "where (m.fromm =? and r.touser =?) or (r.touser=? and m.fromm=?)\n" +
+                     "order by id \n" +
+                     "limit ? offset ?");
+             PreparedStatement statement1 = connection.prepareStatement("select touser from replyto where id_msg=?")) {
 
             statement.setLong(1, id1);
             statement.setLong(2, id2);
-            statement.setInt(3, 5);
-            statement.setInt(4, (t-1)*5);
+            statement.setLong(3, id1);
+            statement.setLong(4, id2);
+            statement.setInt(5, 5);
+            statement.setInt(6, (t-1)*5);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Long Id = resultSet.getLong("id");
-                statement1.setLong(1, Id);
                 Long utilizator = resultSet.getLong("fromm");
                 String msg = resultSet.getString("text");
                 Date date = resultSet.getDate("date");
@@ -165,8 +168,9 @@ public class MessageDbRepository implements  Repository<Long, Message> {
                     if(u.getId()==utilizator)
                         utilizatorfinal=u;
                 }
+                statement1.setLong(1, Id);
                 ResultSet resultSet1 = statement1.executeQuery();
-                while (resultSet1.next()){
+                while (resultSet1.next()) {
                     for (User u : utilizatori) {
                         if (u.getId() == resultSet1.getLong("touser"))
                             destinatoriList.add(u);
