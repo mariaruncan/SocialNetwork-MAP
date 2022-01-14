@@ -93,7 +93,6 @@ public class MessagesWithUserController implements Observer {
         for(Message m : srv.getChatsPagination(userLogged.getId(), userMessaged.getId(),t))
             messages.add(new MessageDTO(m));
         tableView.setItems(messages);
-        this.srv.addObserver(this);
     }
 
     @FXML
@@ -125,6 +124,7 @@ public class MessagesWithUserController implements Observer {
 
         List<User> toList = new ArrayList<>();
         toList.add(userMessaged);
+        this.srv.addObserver(this);
         srv.sendMessage(new Message(userLogged, toList, text));
     }
     public void nextPage(ActionEvent actionEvent) {
@@ -158,6 +158,7 @@ public class MessagesWithUserController implements Observer {
         toList.add(userMessaged);
         Message msg = new Message(userLogged, toList, text);
         msg.setReply(srv.getMessage(id));
+        this.srv.addObserver(this);
         srv.sendMessage(msg);
     }
 
@@ -177,6 +178,7 @@ public class MessagesWithUserController implements Observer {
 
         Long id = tableView.getSelectionModel().getSelectedItem().getId();
         Message msg = srv.getMessage(id);
+        this.srv.addObserver(this);
         srv.replyAll(msg, userLogged, text);
 
     }
@@ -200,6 +202,7 @@ public class MessagesWithUserController implements Observer {
             final List<Message> ms = srv.getChats(userLogged.getId(), userMessaged.getId());
             this.messages
                     .add(new MessageDTO(ms.get(ms.size() - 1)));
+            this.srv.removeObserver(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

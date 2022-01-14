@@ -369,7 +369,7 @@ public class Service implements Observable {
         for(User u : m.getTo())
             if(u.getId()!= user.getId())
                 toList.add(u);
-        Message message = new Message(user,toList,reply)   ;
+        Message message = new Message(user,toList,reply);
         message.setReply(m);
         messageRepository.save(message);
         this.update();
@@ -399,7 +399,7 @@ public class Service implements Observable {
             return null;
 
         fr=friendRequestsRepo.delete(new Tuple<User,User>(from,to));
-
+        this.update();
         return fr;
     }
 

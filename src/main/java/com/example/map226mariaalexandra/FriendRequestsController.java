@@ -132,6 +132,7 @@ public class FriendRequestsController implements Observer {
         List<FriendRequest> friendRequests = srv.getUserFriendRequests(user.getId());
         for(FriendRequest f : friendRequests)
             requests.add(new FriendRequestDTO(f.getFrom().getId(), f.getFrom().getFirstName() + " " + f.getFrom().getLastName(), f.getStatus()));
+        this.srv.removeObserver(this);
 
     }
 }
