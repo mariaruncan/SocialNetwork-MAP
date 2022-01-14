@@ -22,7 +22,6 @@ import socialnetwork.service.Service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -83,7 +82,6 @@ public class WelcomePageController implements Observer {
         for(User f : page.getFriends())
                 friendList.add(new FriendDTO(f.getId(),f.getFirstName() + " " + f.getLastName()));
         tableFriends.setItems(friendList);
-        this.srv.addObserver(this);
 
     }
     @FXML
@@ -94,7 +92,6 @@ public class WelcomePageController implements Observer {
         for(Message m : page.getReceivedMessages())
                 messageList.add(new MessageDTO(m));
         tableInbox.setItems(messageList);
-        this.srv.addObserver(this);
     }
 
     @FXML
@@ -115,7 +112,6 @@ public class WelcomePageController implements Observer {
             eventList.add(eventDTO);
         }
         tableEvents.setItems(eventList);
-        this.srv.addObserver(this);
     }
 
     public void switchToLogInPage(ActionEvent event) throws IOException {
@@ -220,6 +216,7 @@ public class WelcomePageController implements Observer {
             return;
         }
         Long id = tableFriends.getSelectionModel().getSelectedItem().getId();
+        this.srv.addObserver(this);
         srv.removeFriendship(user.getId(), id);
     }
 
@@ -308,6 +305,7 @@ public class WelcomePageController implements Observer {
             friendList.add(new FriendDTO(f.getId(),f.getFirstName() + " " + f.getLastName()));
         for(Message m : page.getReceivedMessages())
             messageList.add(new MessageDTO(m));
+        this.srv.removeObserver(this);
     }
 
     public void onAddEventButtonClicked(ActionEvent actionEvent) {
@@ -318,6 +316,7 @@ public class WelcomePageController implements Observer {
         }
 
         LocalDate date = datePicker.getValue();
+        this.srv.addObserver(this);
         srv.addEvent(name, date);
 
         eventNameTextField.setText("");
@@ -331,6 +330,7 @@ public class WelcomePageController implements Observer {
         }
 
         Boolean sub = ev.getSubscribed();
+        this.srv.addObserver(this);
         if(sub)
             srv.unsubscribeFromEvent(ev.getId(), user.getId());
         else

@@ -118,6 +118,6 @@ public class SeeSentRequestsController implements Observer {
         List<FriendRequest> friendRequests = srv.getUserSentFriendRequests(user.getId());
         for(FriendRequest f : friendRequests)
             requests.add(new FriendRequestDTO(f.getTo().getId(), f.getTo().getFirstName() + " " + f.getTo().getLastName(), f.getStatus()));
-
+        this.srv.removeObserver(this);
     }
 }
