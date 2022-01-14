@@ -6,6 +6,7 @@ import socialnetwork.domain.User;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -23,6 +24,12 @@ public class EventDbRepository implements Repository<Long, Event>{
         this.username = username;
         this.password = password;
         this.users = repo.findAll();
+
+        Iterable<Event> events = this.findAll();
+        Iterable<Event> passedEvents = StreamSupport.stream(events.spliterator(), false)
+                .filter(e -> e.getDate().isBefore(LocalDate.now()))
+                .collect(Collectors.toList());
+        this.deleteAll(passedEvents);
     }
 
     @Override
