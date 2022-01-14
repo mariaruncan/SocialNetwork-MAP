@@ -1,5 +1,6 @@
 package com.example.map226mariaalexandra;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +17,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import socialnetwork.domain.*;
+import socialnetwork.domain.utils.MyThread;
 import socialnetwork.domain.utils.Observer;
 import socialnetwork.service.Service;
 
@@ -68,6 +70,7 @@ public class WelcomePageController implements Observer {
     private ObservableList<FriendDTO> friendList;
     private ObservableList<MessageDTO> messageList;
     private ObservableList<EventDTO> eventList;
+    private MyThread notifyThread = null;
 
 
     private  void  displayName(){
@@ -119,6 +122,9 @@ public class WelcomePageController implements Observer {
     }
 
     public void switchToLogInPage(ActionEvent event) throws IOException {
+        this.notifyThread.stop();
+        this.notifyThread = null;
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("logIn.fxml"));
         root = loader.load();
 
@@ -244,6 +250,7 @@ public class WelcomePageController implements Observer {
         showInbox();
         showEvents();
         initReport();
+        this.notifyThread = new MyThread(this);
     }
 
     public void notifyEvents(){
