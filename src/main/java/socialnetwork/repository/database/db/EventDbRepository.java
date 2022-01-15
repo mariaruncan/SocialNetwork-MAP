@@ -6,7 +6,6 @@ import socialnetwork.domain.User;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -14,10 +13,10 @@ import java.util.stream.StreamSupport;
 
 public class EventDbRepository implements Repository<Long, Event>{
 
-    private String url;
-    private String username;
-    private String password;
-    private Iterable<User> users;
+    private final String url;
+    private final String username;
+    private final String password;
+    private final Iterable<User> users;
 
     public EventDbRepository(String url, String username, String password, Repository<Long, User> repo){
         this.url = url;
@@ -36,17 +35,13 @@ public class EventDbRepository implements Repository<Long, Event>{
     public int size() {
         AtomicInteger n = new AtomicInteger();
         Iterable<Event> events = findAll();
-        events.forEach(x -> {
-            n.getAndIncrement();
-        });
+        events.forEach(x -> n.getAndIncrement());
         return n.get();
     }
 
     @Override
     public boolean exists(Long aLong) {
-        if (findOne(aLong) != null)
-            return true;
-        return false;
+        return findOne(aLong) != null;
     }
 
     @Override
@@ -56,7 +51,7 @@ public class EventDbRepository implements Repository<Long, Event>{
 
     @Override
     public void saveAll(Iterable<Event> list) {
-        list.forEach(x -> save(x));
+        list.forEach(this::save);
     }
 
     @Override
@@ -64,14 +59,14 @@ public class EventDbRepository implements Repository<Long, Event>{
         if(aLong == null)
             throw new IllegalArgumentException("id must not be null!");
         try(Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement statement = connection.prepareStatement("SELECT * from events WHERE id=?");
-            PreparedStatement statement1 = connection.prepareStatement("SELECT * from events_subscribers WHERE id=?")) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM events WHERE id = ?");
+            PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM events_subscribers WHERE id = ?")) {
             statement.setLong(1, aLong);
             statement1.setLong(1, aLong);
             ResultSet resultSet = statement.executeQuery();
 
-            Event event = null;
-            while(resultSet.next()){
+            Event event;
+            if (resultSet.next()){
                 Long id = resultSet.getLong("id");
                 String name = resultSet.getString("name");
                 Date date = resultSet.getDate("date");
@@ -82,7 +77,7 @@ public class EventDbRepository implements Repository<Long, Event>{
                 while(resultSet1.next()){
                     Long userId = resultSet1.getLong("user_id");
                     User user = StreamSupport.stream(users.spliterator(), false)
-                            .filter(x -> x.getId() == userId)
+                            .filter(x -> x.getId().equals(userId))
                             .collect(Collectors.toList())
                             .get(0);
                     subscribedUsers.add(user);
@@ -94,10 +89,10 @@ public class EventDbRepository implements Repository<Long, Event>{
                 return event;
             }
 
-            return event;
+            return null;
         }
         catch (SQLException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -107,11 +102,11 @@ public class EventDbRepository implements Repository<Long, Event>{
         List<Event> events = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM events");
-            PreparedStatement ps1 = connection.prepareStatement("SELECT * FROM events_subscribers WHERE event_id=?");
+            PreparedStatement ps1 = connection.prepareStatement("SELECT * FROM events_subscribers WHERE event_id = ?");
             ResultSet resultSet = ps.executeQuery()){
 
             while(resultSet.next()){
-                Long id = resultSet.getLong("id");
+                long id = resultSet.getLong("id");
 
                 ps1.setLong(1, id);
                 String name = resultSet.getString("name");
@@ -124,7 +119,7 @@ public class EventDbRepository implements Repository<Long, Event>{
                 while(resultSet1.next()){
                     Long userId = resultSet1.getLong("user_id");
                     User user = StreamSupport.stream(users.spliterator(), false)
-                            .filter(x -> x.getId() == userId)
+                            .filter(x -> x.getId().equals(userId))
                             .collect(Collectors.toList())
                             .get(0);
                     subscribedUsers.add(user);
@@ -138,14 +133,14 @@ public class EventDbRepository implements Repository<Long, Event>{
             return events;
         }
         catch(SQLException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return events;
         }
     }
 
     @Override
     public Event save(Event entity) {
-        String sql = "INSERT INTO events(name,date) VALUES(?,?)";
+        String sql = "INSERT INTO events(name, date) VALUES(?, ?)";
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement(sql)){
 
@@ -155,7 +150,7 @@ public class EventDbRepository implements Repository<Long, Event>{
             return  entity;
         }
         catch(SQLException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -172,7 +167,7 @@ public class EventDbRepository implements Repository<Long, Event>{
             return event;
         }
         catch(SQLException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -188,20 +183,20 @@ public class EventDbRepository implements Repository<Long, Event>{
             return entity;
         }
         catch(SQLException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
 
     public void subscribe(Long eventId, Long userId){
         try(Connection connection = DriverManager.getConnection(url, username, password);
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO events_subscribers(event_id,user_id) VALUES (?, ?)")){
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO events_subscribers(event_id, user_id) VALUES (?, ?)")){
             ps.setLong(1, eventId);
             ps.setLong(2, userId);
             ps.executeUpdate();
         }
         catch(SQLException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -213,7 +208,7 @@ public class EventDbRepository implements Repository<Long, Event>{
             ps.executeUpdate();
         }
         catch(SQLException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

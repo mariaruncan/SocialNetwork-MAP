@@ -3,10 +3,12 @@ package socialnetwork.domain.utils;
 import com.example.map226mariaalexandra.WelcomePageController;
 import javafx.application.Platform;
 
+import java.util.ConcurrentModificationException;
+
 public class MyThread implements Runnable{
     private boolean exit;
-    private Thread thread;
-    private WelcomePageController controller;
+    private final Thread thread;
+    private final WelcomePageController controller;
 
     public MyThread(WelcomePageController controller){
         this.thread = new Thread(this);
@@ -25,7 +27,7 @@ public class MyThread implements Runnable{
                 }
             });
             try{
-                Thread.sleep(60000);
+                Thread.sleep(180000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -27,13 +27,13 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
     @Override
     public int size() {
         try (Connection connection1 = getConnection(url, username, password);
-             PreparedStatement statement = connection1.prepareStatement("SELECT COUNT(*) from friend_requests")) {
+             PreparedStatement statement = connection1.prepareStatement("SELECT COUNT(*) FROM friend_requests")) {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt("count");
             return 0;
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return 0;
         }
     }
@@ -50,7 +50,7 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
 
     @Override
     public void saveAll(Iterable<FriendRequest> list) {
-        list.forEach(x -> save(x));
+        list.forEach(this::save);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
             throw new IllegalArgumentException("Tuple of users must not be null!");
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT * from friend_requests WHERE friend_requests.from=? and friend_requests.to=?")) {
+                     "SELECT * FROM friend_requests WHERE friend_requests.from=? AND friend_requests.to=?")) {
             statement.setLong(1, t.getLeft().getId());
             statement.setLong(2, t.getRight().getId());
             ResultSet resultSet = statement.executeQuery();
@@ -75,7 +75,7 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
             }
             return friendRequest;
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
     }
@@ -84,7 +84,7 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
     public Iterable<FriendRequest> findAll() {
         ArrayList<FriendRequest> requestsList = new ArrayList<>();
         try (Connection connection = getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * from friend_requests");
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM friend_requests");
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -96,13 +96,9 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
                 FriendRequest friendRequest = new FriendRequest(userFrom, userTo);
                 friendRequest.setStatus(status);
                 requestsList.add(friendRequest);
-
             }
             return requestsList;
-        } catch(
-                SQLException e)
-
-        {
+        } catch(SQLException e) {
             e.printStackTrace();
             return requestsList;
         }
@@ -111,7 +107,7 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
     @Override
     public FriendRequest save(FriendRequest entity) {
         validator.validate(entity);
-        String sql = "insert into friend_requests values (?, ?, ?)";
+        String sql = "INSERT INTO friend_requests VALUES (?, ?, ?)";
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -122,13 +118,14 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
 
             return entity;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     @Override
     public FriendRequest delete(Tuple<User, User> t) {
-        String sql = "delete from friend_requests where friend_requests.from = ? and friend_requests.to =?";
+        String sql = "DELETE FROM friend_requests WHERE friend_requests.from = ? AND friend_requests.to = ?";
         FriendRequest fr = findOne(t);
         try(Connection connection = getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement(sql)){
@@ -137,7 +134,8 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
             ps.setLong(2, t.getRight().getId());
             ps.executeUpdate();
             return fr;
-        } catch (SQLException throwables) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -145,7 +143,7 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
     @Override
     public FriendRequest update(FriendRequest entity) {
         validator.validate(entity);
-        String sql = "update friend_requests set status = ? where friend_requests.from = ? and friend_requests.to = ? ";
+        String sql = "UPDATE friend_requests SET status = ? WHERE friend_requests.from = ? AND friend_requests.to = ? ";
         try(Connection connection = getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, entity.getStatus());
@@ -154,13 +152,14 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
             ps.executeUpdate();
             return entity;
         } catch (SQLException e){
+            e.printStackTrace();
             return null;
         }
     }
 
     private User findUser(Long aLong){
         try (Connection connection = getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * from users WHERE id=?")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")) {
             statement.setDouble(1, aLong);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -173,7 +172,7 @@ public class FriendRequestDbRepository implements Repository<Tuple<User, User>, 
             }
             return null;
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
     }

@@ -75,8 +75,8 @@ public class SearchFriendsController {
                 .collect(Collectors.toList());
 
 
-        id.setCellValueFactory(new PropertyValueFactory<UserDTO, Long>("id"));
-        name.setCellValueFactory(new PropertyValueFactory<UserDTO, String>("name"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        name.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         ObservableList<UserDTO> objects = FXCollections.observableArrayList();
         for(User u : users)
@@ -97,9 +97,8 @@ public class SearchFriendsController {
     }
 
     public void switchMainPage(ActionEvent event) throws IOException {
-
         FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("welcomePage.fxml"));
-        root=loader.load();
+        root = loader.load();
         WelcomePageController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(user);
@@ -107,7 +106,6 @@ public class SearchFriendsController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-
     }
 
     public void onSendButtonClick(ActionEvent actionEvent) {
@@ -120,16 +118,13 @@ public class SearchFriendsController {
         User userSelected = srv.getUser(id);
         try {
             FriendRequest fr = srv.addFriendRequest(new FriendRequest(user, userSelected));
-            if(fr != null) {
+            if(fr != null)
                 showAlert("Yay", "Friend request sent to " + userSelected.getFirstName() + " " + userSelected.getLastName());
-            }
             else
                 showAlert("Ops", "Can not send friend request!");
-        }
-        catch(ValidationException ex){
+        } catch(ValidationException ex){
             showAlert("Ops", ex.getMessage());
         }
-
     }
 
     public void onSeeMessagesButtonClick(ActionEvent event) throws IOException{
@@ -137,16 +132,13 @@ public class SearchFriendsController {
             showAlert("Ops", "Please select an user!");
             return;
         }
-
-
         Long id = tableView.getSelectionModel().getSelectedItem().getId();
-        if(id == user.getId()) {
+        if(id.equals(user.getId())) {
             showAlert("Ops", "Can not send a message to yourself!");
             return;
         }
 
         User userSelected = srv.getUser(id);
-
         FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("messagesWithUser.fxml"));
         root = loader.load();
         MessagesWithUserController controller = loader.getController();
@@ -158,7 +150,9 @@ public class SearchFriendsController {
         stage.setScene(scene);
         stage.show();
     }
-    public void generateRaport(ActionEvent event) throws IOException {
+
+
+    public void generateReport(ActionEvent event) throws IOException {
         int month= monthChoiceBox.getValue();
         if(tableView.getSelectionModel().getSelectedItem() == null){
             showAlert("Ops", "Please select an user!");
@@ -167,25 +161,20 @@ public class SearchFriendsController {
 
         UserDTO friend = tableView.getSelectionModel().getSelectedItem();
         try (PDDocument doc = new PDDocument()) {
-
             PDPage myPage = new PDPage();
             doc.addPage(myPage);
             List<Message> messages = srv.reportUsersMessagesFriendMonth(user.getId(), friend.getId(), month).getRight();
-
             try (PDPageContentStream cont = new PDPageContentStream(doc, myPage)) {
-
                 cont.beginText();
-
                 cont.setFont(PDType1Font.TIMES_ROMAN, 12);
                 cont.setLeading(14.5f);
-
                 cont.newLineAtOffset(25, 700);
-                String line1 = "The user "+user.getFirstName()+" "+user.getLastName()+" received the following messages from the user "+
-                        friend.getName()+" in the month"+String.valueOf(month)+ ":";
+                String line1 = "The user " + user.getFirstName() + " " + user.getLastName() + " received the following messages from the user "
+                        + friend.getName() + " in the month " + month + ":";
                 cont.showText(line1);
                 cont.newLine();
                 for(Message m : messages) {
-                    String line2 = m.getText()+";";
+                    String line2 = m.getText() + ";";
                     cont.newLine();
                     cont.showText(line2);
                 }
@@ -196,11 +185,7 @@ public class SearchFriendsController {
             catch(Exception ex){
                 System.out.println(ex.getMessage());
             }
-
             doc.save("src/main/resources/Messages from a friend report.pdf");
         }
-
-
-
     }
 }

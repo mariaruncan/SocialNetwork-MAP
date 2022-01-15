@@ -7,7 +7,6 @@ import socialnetwork.domain.Tuple;
 import socialnetwork.domain.User;
 import socialnetwork.service.Service;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -141,8 +140,8 @@ public class Ui {
 
     private void uiAddFriendship(){
         System.out.println("Users, separated by enter: ");
-        Long id1 = in.nextLong();
-        Long id2 = in.nextLong();
+        long id1 = in.nextLong();
+        long id2 = in.nextLong();
         Friendship friendship = srv.addFriendship(id1, id2);
         if(friendship != null)
             System.out.println("The users are now friends!");
@@ -152,8 +151,8 @@ public class Ui {
 
     private void uiRemoveFriendship(){
         System.out.println("Users, separated by enter: ");
-        Long id1 = in.nextLong();
-        Long id2 = in.nextLong();
+        long id1 = in.nextLong();
+        long id2 = in.nextLong();
         Friendship friendship = srv.removeFriendship(id1, id2);
         if(friendship == null)
             System.out.println("The users don't exist or they were not friends!");
@@ -168,8 +167,7 @@ public class Ui {
     }
 
     private void uiCommunitiesNumber(){
-        System.out.println("There are " + srv.communitiesNumber() + " communities!"
-        );
+        System.out.println("There are " + srv.communitiesNumber() + " communities!");
     }
 
     private void uiMostSociableCommunity(){
@@ -188,10 +186,10 @@ public class Ui {
         if(rez.isEmpty())
             System.out.println("No friendships");
         rez.forEach(x -> {
-            if (x.getUser1().getId() == id)
+            if (x.getUser1().getId().equals(id))
                 System.out.println(x.getUser2().getFirstName() + " " + x.getUser2().getLastName() + " " + x.getDate());
 
-            if (x.getUser2().getId() == id)
+            if (x.getUser2().getId().equals(id))
                 System.out.println(x.getUser1().getFirstName() + " " + x.getUser1().getLastName() + " " + x.getDate());
         });
 
@@ -201,7 +199,7 @@ public class Ui {
         System.out.println("User's id:");
         Long id = in.nextLong();
         System.out.println("Month:");
-        Integer month = in.nextInt();
+        int month = in.nextInt();
         if(month < 1 || month > 12) {
             System.out.println("Invalid month!");
             return;
@@ -344,7 +342,7 @@ public class Ui {
             int ok=0;
             Message t = null;
             for(Message m : inbox)
-                if(m.getId()==idMessage) {
+                if(m.getId().equals(idMessage)) {
                     ok++;
                     t=m;
                 }
@@ -354,7 +352,6 @@ public class Ui {
                 srv.replyAll(t, user, reply);
                 System.out.println("Message sent to all");
             }
-
         }
     }
 
@@ -368,13 +365,12 @@ public class Ui {
         if(mesaje.isEmpty())
             System.out.println("No chats");
         else{
-            mesaje.stream().sorted((a,b)->a.getDate().compareTo(b.getDate()))
+            mesaje.stream().sorted(Comparator.comparing(Message::getDate))
                     .forEach(x->{
                         if(x.getReply()!=null)
                             System.out.println(x.getReply().getDate()+"  Reply la:\n"+x.getReply().getText());
                         System.out.println(x.getDate()+"  "+x.getFrom().getFirstName()+" "+x.getFrom().getLastName()+":\n"+x.getText()+"\n");
                     });
         }
-
     }
 }

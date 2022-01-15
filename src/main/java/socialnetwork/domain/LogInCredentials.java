@@ -1,9 +1,9 @@
 package socialnetwork.domain;
 
 public class LogInCredentials {
-    private Long id;
-    private String username;
-    private String hashedPassword;
+    private final Long id;
+    private final String username;
+    private final String hashedPassword;
 
     public LogInCredentials(Long id, String username, String hashedPassword) {
         this.id = id;

@@ -12,77 +12,67 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="350.0" prefWidth="922.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.MessagesWithUserController">
-   <children>
-      <SplitPane dividerPositions="0.6662404092071611" prefHeight="350.0" prefWidth="940.0" style="-fx-background-color: #9fc9b2;">
-         <items>
-            <AnchorPane onMouseClicked="#refreshTable" prefHeight="352.0" prefWidth="310.0" style="-fx-background-color: #45a583;">
-               <children>
-                  <ImageView fitHeight="166.0" fitWidth="203.0" layoutX="1.0" layoutY="-26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../mint1.jpeg" />
-                     </image>
-                  </ImageView>
-                  <TextField fx:id="textField" layoutX="58.0" layoutY="135.0" prefHeight="26.0" prefWidth="205.0" />
-                  <Button fx:id="sendButton" layoutX="104.0" layoutY="175.0" mnemonicParsing="false" onAction="#onSendButtonClick" style="-fx-background-color: #9fc9b2;" text="Send message" textFill="#f7f7f7">
-                     <font>
-                        <Font name="Century" size="13.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="replyButton" layoutX="129.0" layoutY="207.0" mnemonicParsing="false" onAction="#onButtonReplyClick" style="-fx-background-color: #9fc9b2;" text="Reply" textFill="#f7f7f7">
-                     <font>
-                        <Font name="Century" size="13.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="replyAllButton" layoutX="119.0" layoutY="243.0" mnemonicParsing="false" onAction="#onReplyAllButton" style="-fx-background-color: #9fc9b2;" text="Reply all" textFill="#f7f7f7">
-                     <font>
-                        <Font name="Century" size="13.0" />
-                     </font>
-                  </Button>
-                  <Label layoutX="14.0" layoutY="140.0" text="Text:" textFill="#f7f7f7">
-                     <font>
-                        <Font name="Century" size="14.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="131.0" layoutY="279.0" mnemonicParsing="false" onAction="#switchSearchUsersPage" style="-fx-background-color: #9fc9b2;" text="Back" textFill="#f7f7f7">
-                     <font>
-                        <Font name="Century" size="13.0" />
-                     </font>
-                  </Button>
-               </children>
-            </AnchorPane>
-            <AnchorPane prefHeight="356.0" prefWidth="622.0" style="-fx-background-color: #9fc9b2;">
-               <children>
-                  <ImageView fitHeight="355.0" fitWidth="656.0" layoutX="-15.0" layoutY="-3.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../../../patt4.jpg" />
-                     </image>
-                  </ImageView>
-                  <TableView fx:id="tableView" layoutY="70.0" prefHeight="231.0" prefWidth="638.0">
-                    <columns>
-                      <TableColumn fx:id="id" prefWidth="23.200012266635895" style="-fx-background-color: #9fc9b2;" text="id" />
-                      <TableColumn fx:id="from" prefWidth="85.5999755859375" style="-fx-background-color: #9fc9b2;" text="from" />
-                        <TableColumn fx:id="to" prefWidth="230.40005493164062" style="-fx-background-color: #9fc9b2;" text="to" />
-                        <TableColumn fx:id="text" prefWidth="123.20001220703125" style="-fx-background-color: #9fc9b2;" text="text" />
-                        <TableColumn fx:id="date" minWidth="0.0" prefWidth="116.79998779296875" style="-fx-background-color: #9fc9b2;" text="date" />
-                        <TableColumn fx:id="reply" prefWidth="54.4000244140625" style="-fx-background-color: #9fc9b2;" text="reply" />
-                    </columns>
-                  </TableView>
-                  <Button fx:id="previousPage" layoutX="7.0" layoutY="308.0" mnemonicParsing="false" onAction="#previousPage" prefHeight="26.0" prefWidth="147.0" style="-fx-background-color: #9fc9b2; -fx-border-color: white;" text="Previous">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Button>
-                  <Button fx:id="nextButton" layoutX="492.0" layoutY="308.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="26.0" prefWidth="132.0" style="-fx-background-color: #9fc9b2; -fx-border-color: white;" text="Next">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Button>
-                  <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="21.0" prefHeight="38.0" prefWidth="529.0" textFill="#45a583">
-                     <font>
-                        <Font name="Century" size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-         </items>
-      </SplitPane>
-   </children>
+   <SplitPane dividerPositions="0.6662404092071611" prefHeight="350.0" prefWidth="940.0" style="-fx-background-color: #9fc9b2;">
+      <AnchorPane prefHeight="352.0" prefWidth="310.0" style="-fx-background-color: #45a583;">
+         <ImageView fitHeight="166.0" fitWidth="203.0" layoutX="1.0" layoutY="-26.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../../mint1.jpeg" />
+         </ImageView>
+         <TextField fx:id="textField" layoutX="58.0" layoutY="135.0" prefHeight="26.0" prefWidth="205.0" />
+         <Button fx:id="sendButton" layoutX="104.0" layoutY="175.0" mnemonicParsing="false" onAction="#onSendButtonClick" style="-fx-background-color: #9fc9b2;" text="Send message" textFill="#f7f7f7">
+            <font>
+               <Font name="Century" size="13.0" />
+            </font>
+         </Button>
+         <Button fx:id="replyButton" layoutX="129.0" layoutY="207.0" mnemonicParsing="false" onAction="#onButtonReplyClick" style="-fx-background-color: #9fc9b2;" text="Reply" textFill="#f7f7f7">
+            <font>
+               <Font name="Century" size="13.0" />
+            </font>
+         </Button>
+         <Button fx:id="replyAllButton" layoutX="119.0" layoutY="243.0" mnemonicParsing="false" onAction="#onReplyAllButton" style="-fx-background-color: #9fc9b2;" text="Reply all" textFill="#f7f7f7">
+            <font>
+               <Font name="Century" size="13.0" />
+            </font>
+         </Button>
+         <Label layoutX="14.0" layoutY="140.0" text="Text:" textFill="#f7f7f7">
+            <font>
+               <Font name="Century" size="14.0" />
+            </font>
+         </Label>
+         <Button layoutX="131.0" layoutY="279.0" mnemonicParsing="false" onAction="#switchSearchUsersPage" style="-fx-background-color: #9fc9b2;" text="Back" textFill="#f7f7f7">
+            <font>
+               <Font name="Century" size="13.0" />
+            </font>
+         </Button>
+      </AnchorPane>
+      <AnchorPane prefHeight="356.0" prefWidth="622.0" style="-fx-background-color: #9fc9b2;">
+         <ImageView fitHeight="355.0" fitWidth="656.0" layoutX="-15.0" layoutY="-3.0" pickOnBounds="true">
+            <Image url="@../../../patt4.jpg" />
+         </ImageView>
+         <TableView fx:id="tableView" layoutY="70.0" prefHeight="231.0" prefWidth="638.0">
+            <columns>
+               <TableColumn fx:id="id" prefWidth="23.200012266635895" style="-fx-background-color: #9fc9b2;" text="id" />
+               <TableColumn fx:id="from" prefWidth="85.5999755859375" style="-fx-background-color: #9fc9b2;" text="from" />
+               <TableColumn fx:id="to" prefWidth="230.40005493164062" style="-fx-background-color: #9fc9b2;" text="to" />
+               <TableColumn fx:id="text" prefWidth="123.20001220703125" style="-fx-background-color: #9fc9b2;" text="text" />
+               <TableColumn fx:id="date" minWidth="0.0" prefWidth="116.79998779296875" style="-fx-background-color: #9fc9b2;" text="date" />
+               <TableColumn fx:id="reply" prefWidth="54.4000244140625" style="-fx-background-color: #9fc9b2;" text="reply" />
+            </columns>
+         </TableView>
+         <Button layoutX="7.0" layoutY="308.0" mnemonicParsing="false" onAction="#previousPage" prefHeight="26.0" prefWidth="147.0" style="-fx-background-color: #9fc9b2; -fx-border-color: white;" text="Previous">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Button>
+         <Button fx:id="nextButton" layoutX="492.0" layoutY="308.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="26.0" prefWidth="132.0" style="-fx-background-color: #9fc9b2; -fx-border-color: white;" text="Next">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Button>
+         <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="21.0" prefHeight="38.0" prefWidth="529.0" textFill="#45a583">
+            <font>
+               <Font name="Century" size="24.0" />
+            </font>
+         </Label>
+      </AnchorPane>
+   </SplitPane>
 </AnchorPane>

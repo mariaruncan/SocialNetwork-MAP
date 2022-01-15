@@ -11,10 +11,10 @@ import static java.sql.DriverManager.getConnection;
 
 public class UserDbRepository implements Repository<Long, User> {
 
-    private String url;
-    private String username;
-    private String password;
-    private Validator<User> validator;
+    private final String url;
+    private final String username;
+    private final String password;
+    private final Validator<User> validator;
 
     public UserDbRepository(String url, String username, String password, Validator<User> validator) {
         this.url = url;
@@ -28,16 +28,13 @@ public class UserDbRepository implements Repository<Long, User> {
     public int size() {
         AtomicInteger n= new AtomicInteger();
         Iterable<User> users = findAll();
-        users.forEach(x-> {
-            n.getAndIncrement();});
+        users.forEach(x-> n.getAndIncrement());
         return n.get();
     }
 
     @Override
     public boolean exists(Long aLong) {
-        if(findOne(aLong) != null)
-            return true;
-        else return false;
+        return findOne(aLong) != null;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class UserDbRepository implements Repository<Long, User> {
 
     @Override
     public void saveAll(Iterable<User> list) {
-        list.forEach(x->save(x));
+        list.forEach(this::save);
     }
 
     @Override
@@ -55,19 +52,19 @@ public class UserDbRepository implements Repository<Long, User> {
         if (id == null)
             throw new IllegalArgumentException("Id must be not null!");
         try (Connection connection = getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * from users WHERE id=?")){
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")){
              statement.setDouble(1, id.doubleValue());
              ResultSet resultSet = statement.executeQuery();
              User user = null;
                 while(resultSet.next()){
-                Long Id = resultSet.getLong("id");
+                Long userId = resultSet.getLong("id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
                 user = new User(firstName, lastName);
-                user.setId(Id);}
+                user.setId(userId);}
             return user;
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
     }
@@ -76,28 +73,27 @@ public class UserDbRepository implements Repository<Long, User> {
     public Iterable<User> findAll() {
         ArrayList<User> users = new ArrayList<>();
         try (Connection connection = getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * from users");
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                Long id = resultSet.getLong("id");
+                Long userId = resultSet.getLong("id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
                 User user = new User(firstName, lastName);
-                user.setId(id);
+                user.setId(userId);
                 users.add(user);
             }
             return users;
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return users;
         }
     }
 
     @Override
     public User save(User entity) {
-
-        String sql = "insert into users (first_name, last_name ) values (?, ?)";
+        String sql = "INSERT INTO users (first_name, last_name ) VALUES (?, ?)";
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -112,13 +108,14 @@ public class UserDbRepository implements Repository<Long, User> {
             }
             return entity;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     @Override
     public User delete(Long aLong) {
-        String sql = "delete from users where id = ?";
+        String sql = "DELETE FROM users WHERE id = ?";
         User u = findOne(aLong);
         try(Connection connection = getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement(sql)){
@@ -126,15 +123,15 @@ public class UserDbRepository implements Repository<Long, User> {
             ps.setLong(1, aLong);
             ps.executeUpdate();
             return u;
-        } catch (SQLException throwables) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
-
     }
 
     @Override
     public User update(User entity) {
-        String sql = "update users set first_name = ?, last_name = ? where id = ?";
+        String sql = "UPDATE users SET first_name = ?, last_name = ? WHERE id = ?";
         try(Connection connection = getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, entity.getFirstName());
@@ -143,8 +140,8 @@ public class UserDbRepository implements Repository<Long, User> {
             ps.executeUpdate();
             return entity;
         } catch (SQLException e){
+            e.printStackTrace();
             return null;
         }
     }
-
 }

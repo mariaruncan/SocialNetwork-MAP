@@ -12,52 +12,53 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="366.0" prefWidth="320.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.LogInController">
-   <children>
-      <ImageView fitHeight="187.0" fitWidth="191.0" layoutX="63.0" layoutY="-48.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../mint1.jpeg" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="239.0" fitWidth="295.0" layoutX="13.0" layoutY="109.0" pickOnBounds="true">
-         <image>
-            <Image url="@../../../patt4.jpg" />
-         </image>
-         <effect>
-            <BoxBlur height="83.41" iterations="3" width="191.25">
-               <input>
-                  <Shadow>
-                     <color>
-                        <Color red="0.057992201298475266" green="0.06315789371728897" blue="0.057309940457344055" opacity="0.9599999785423279" />
-                     </color>
-                  </Shadow>
-               </input>
-            </BoxBlur>
-         </effect>
-      </ImageView>
-      <Label contentDisplay="CENTER" layoutX="128.0" layoutY="106.0" prefHeight="66.0" prefWidth="94.0" text="Log in" textFill="#f0eded">
-         <font>
-            <Font name="Century" size="30.0" />
-         </font>
-      </Label>
-      <Label layoutX="26.0" layoutY="187.0" prefHeight="22.0" prefWidth="72.0" text="Username" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Label layoutX="26.0" layoutY="224.0" text="Password" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <PasswordField fx:id="passwordField" layoutX="100.0" layoutY="223.0" prefHeight="26.0" prefWidth="176.0" promptText="password" />
-      <Button layoutX="141.0" layoutY="271.0" mnemonicParsing="false" onAction="#switchToWelcomePage" text="Log in" textFill="#44734d">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Button>
-      <TextField fx:id="usernameTextField" layoutX="101.0" layoutY="186.0" prefHeight="26.0" prefWidth="176.0" />
-      <Label layoutX="109.0" layoutY="319.0" text="No account?" textFill="WHITE" />
-      <Label layoutX="180.0" layoutY="319.0" onMouseClicked="#switchCreateAccount" text="Create one!" textFill="#9fffdd" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="366.0"
+            prefWidth="320.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.LogInController">
+   <ImageView fitHeight="187.0" fitWidth="191.0" layoutX="63.0" layoutY="-48.0" pickOnBounds="true"
+              preserveRatio="true">
+      <Image url="@../../../mint1.jpeg"/>
+   </ImageView>
+   <ImageView fitHeight="239.0" fitWidth="295.0" layoutX="13.0" layoutY="109.0" pickOnBounds="true">
+      <effect>
+         <BoxBlur height="83.41" iterations="3" width="191.25">
+            <input>
+               <Shadow>
+                  <color>
+                     <Color red="0.057992201298475266" green="0.06315789371728897" blue="0.057309940457344055"
+                            opacity="0.9599999785423279"/>
+                  </color>
+               </Shadow>
+            </input>
+         </BoxBlur>
+      </effect>
+      <Image url="@../../../patt4.jpg"/>
+   </ImageView>
+   <Label contentDisplay="CENTER" layoutX="128.0" layoutY="106.0" prefHeight="66.0" prefWidth="94.0" text="Log in"
+          textFill="#f0eded">
+      <font>
+         <Font name="Century" size="30.0"/>
+      </font>
+   </Label>
+   <Label layoutX="26.0" layoutY="187.0" prefHeight="22.0" prefWidth="72.0" text="Username" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <Label layoutX="26.0" layoutY="224.0" text="Password" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <PasswordField fx:id="passwordField" layoutX="100.0" layoutY="223.0" prefHeight="26.0" prefWidth="176.0"
+                  promptText="password"/>
+   <Button layoutX="141.0" layoutY="271.0" mnemonicParsing="false" onAction="#switchToWelcomePage" text="Log in"
+           textFill="#44734d">
+      <font>
+         <Font name="System Bold" size="16.0"/>
+      </font>
+   </Button>
+   <TextField fx:id="usernameTextField" layoutX="101.0" layoutY="186.0" prefHeight="26.0" prefWidth="176.0"/>
+   <Label layoutX="109.0" layoutY="319.0" text="No account?" textFill="WHITE"/>
+   <Label layoutX="180.0" layoutY="319.0" onMouseClicked="#switchCreateAccount" text="Create one!" textFill="#9fffdd"/>
 </AnchorPane>

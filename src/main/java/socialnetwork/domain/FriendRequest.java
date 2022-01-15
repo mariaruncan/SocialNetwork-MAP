@@ -3,8 +3,8 @@ package socialnetwork.domain;
 import java.util.Objects;
 
 public class FriendRequest extends Entity<Tuple<User, User>>{
-    private User from;
-    private User to;
+    private final User from;
+    private final User to;
     private String status;
 
     public FriendRequest(User from, User to){

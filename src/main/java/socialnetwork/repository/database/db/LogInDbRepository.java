@@ -1,7 +1,6 @@
 package socialnetwork.repository.database.db;
 
 import socialnetwork.domain.LogInCredentials;
-import socialnetwork.domain.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +10,9 @@ import java.sql.SQLException;
 import static java.sql.DriverManager.getConnection;
 
 public class LogInDbRepository {
-    private String url;
-    private String username;
-    private String password;
+    private final String url;
+    private final String username;
+    private final String password;
 
     public LogInDbRepository(String url, String username, String password) {
         this.url = url;
@@ -31,19 +30,20 @@ public class LogInDbRepository {
             LogInCredentials credentials = null;
             while(resultSet.next()){
                 Long id = resultSet.getLong("user_id");
-                String usname = resultSet.getString("username");
+                String usName = resultSet.getString("username");
                 String hashedPassword = resultSet.getString("hashed_password");
-                credentials = new LogInCredentials(id, usname, hashedPassword);
+                credentials = new LogInCredentials(id, usName, hashedPassword);
                 return credentials;
             }
-            return credentials;
+            return null;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     public LogInCredentials save(LogInCredentials entity){
-        String sql = "INSERT INTO logins(user_id,username,hashed_password) VALUES (?,?,?)";
+        String sql = "INSERT INTO logins(user_id, username, hashed_password) VALUES (?, ?, ?)";
         try(Connection connection = getConnection(url, username,password);
             PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, entity.getId());
@@ -51,8 +51,8 @@ public class LogInDbRepository {
             ps.setString(3, entity.getHashedPassword());
             ps.executeUpdate();
             return entity;
-        } catch (SQLException throwables) {
-            //throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }

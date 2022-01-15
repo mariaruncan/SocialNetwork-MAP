@@ -21,12 +21,12 @@
       </font>
    </Label>
    <ToolBar layoutX="302.0" layoutY="50.0" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #45a583;">
-      <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="26.0" prefWidth="118.0" style="-fx-background-color: #9fc9b2;" text="Cancel Request">
+      <Button mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="26.0" prefWidth="118.0" style="-fx-background-color: #9fc9b2;" text="Cancel Request">
          <font>
             <Font size="13.0" />
          </font>
       </Button>
-      <Button fx:id="backButton" mnemonicParsing="false" onAction="#switchWelcomePage" prefHeight="26.0" prefWidth="49.0" style="-fx-background-color: #9fc9b2;" text="Back">
+      <Button mnemonicParsing="false" onAction="#switchWelcomePage" prefHeight="26.0" prefWidth="49.0" style="-fx-background-color: #9fc9b2;" text="Back">
          <font>
             <Font size="13.0" />
          </font>

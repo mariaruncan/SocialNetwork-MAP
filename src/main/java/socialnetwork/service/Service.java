@@ -30,7 +30,6 @@ public class Service implements Observable {
      * @param usersRepo - Repository<Long, User>
      * @param friendshipsRepo - Repository<Tuple<User, User>, Friendship>
      */
-
     public Service(Repository<Long, User> usersRepo, Repository<Tuple<User, User>, Friendship> friendshipsRepo,
                 Repository<Long, Message> messageRepository, Repository<Tuple<User, User>, FriendRequest> friendRequestsRepository,
                 EventDbRepository eventRepository) {
@@ -95,7 +94,7 @@ public class Service implements Observable {
     public Friendship removeFriendship(long u1, long u2) {
         usersRepo.findOne(u1).removeFriend(usersRepo.findOne(u2));
         usersRepo.findOne(u2).removeFriend(usersRepo.findOne(u1));
-        Friendship f= friendshipsRepo.delete(new Tuple<>(usersRepo.findOne(u1), usersRepo.findOne(u2)));
+        Friendship f = friendshipsRepo.delete(new Tuple<>(usersRepo.findOne(u1), usersRepo.findOne(u2)));
         this.update();
         return f;
     }
@@ -108,9 +107,9 @@ public class Service implements Observable {
         Iterable<User> users = usersRepo.findAll();
         users.forEach(u -> {
             for (Friendship f: friendshipsRepo.findAll())
-                if(f.getUser1().getId() == u.getId())
+                if(f.getUser1().getId().equals(u.getId()))
                     u.addFriend(usersRepo.findOne(f.getUser2().getId()));
-                else if(f.getUser2().getId() == u.getId())
+                else if(f.getUser2().getId().equals(u.getId()))
                     u.addFriend(usersRepo.findOne(f.getUser1().getId()));
             });
         return users;
@@ -134,10 +133,8 @@ public class Service implements Observable {
             size = toIntExact(u.getId());
         }
         Graph g = new Graph(size);
-        for (Friendship f : friendshipsRepo.findAll()){
+        for (Friendship f : friendshipsRepo.findAll())
                 g.addEdge(toIntExact(f.getUser1().getId()), toIntExact(f.getUser2().getId()));
-
-        }
         g.DFS();
         int nr = g.connectedComponents();
         nr = nr - (size - usersRepo.size());
@@ -150,50 +147,46 @@ public class Service implements Observable {
      */
     public List<Integer> mostSociableCommunity() {
         int size = 0;
-        for (User u: usersRepo.findAll()) {
+        for (User u: usersRepo.findAll())
             size = toIntExact(u.getId());
-        }
         Graph g = new Graph(size);
-        for (Friendship f : friendshipsRepo.findAll()) {
+        for (Friendship f : friendshipsRepo.findAll())
                 g.addEdge(toIntExact(f.getUser1().getId()), toIntExact(f.getUser2().getId()));
-
-        }
         g.DFS();
         int max = 1;
-        List<Integer> comp= new ArrayList<>();
+        List<Integer> comp = new ArrayList<>();
         ArrayList<ArrayList<Integer> > lists = g.returnComponents();
         for (ArrayList<Integer> list:lists)
-            if(list.size() >= max)
-            {
+            if(list.size() >= max) {
                 max = list.size();
                 comp = list;
             }
         return comp;
     }
+
+
     public List<Friendship> reportUserFriends(Long id) {
         if(StreamSupport.stream(getAllUsers().spliterator(), false)
-                .collect(Collectors.toList()).stream()
-                .filter(y -> y.getId()==id).collect(Collectors.toList()).isEmpty())
-        {System.out.println("no user");
-            return null;}
+                .collect(Collectors.toList()).stream().noneMatch(y -> y.getId().equals(id))) {
+            System.out.println("No user");
+            return null;
+        }
         else {
-            List<Friendship> rez =StreamSupport.stream(getAllFriendships().spliterator(), false)
+            return StreamSupport.stream(getAllFriendships().spliterator(), false)
                     .collect(Collectors.toList()).stream()
-                    .filter(friendship -> friendship.getUser1().getId() == id  || friendship.getUser2().getId() == id)
+                    .filter(friendship -> friendship.getUser1().getId().equals(id) ||
+                            friendship.getUser2().getId().equals(id))
                     .collect(Collectors.toList());
-           return rez;
     }}
 
     public Tuple<User, List<User>> reportUsersFriendsMonth(Long id, Integer month){
         User user = usersRepo.findOne(id);
         String regex = ".{4}-0{0,1}+" + month.toString() + "-[0-9]{1,2}";
         List<User> list = StreamSupport.stream(friendshipsRepo.findAll().spliterator(), false)
-                .filter(f -> f.getUser1().getId() == id || f.getUser2().getId() == id)
-                .filter(f -> {
-                    return f.getDate().toString().matches(regex);
-                })
+                .filter(f -> f.getUser1().getId().equals(id) || f.getUser2().getId().equals(id))
+                .filter(f -> f.getDate().toString().matches(regex))
                 .map(f -> {
-                    if(f.getUser1().getId() == id)
+                    if(f.getUser1().getId().equals(id))
                         return f.getUser2();
                     else
                         return f.getUser1();
@@ -204,38 +197,38 @@ public class Service implements Observable {
 
     public Tuple<User, List<Message>> reportUsersMessagesMonth(Long id, Integer month){
         User user = usersRepo.findOne(id);
-        List<Message> list = StreamSupport.stream(getInbox(user).spliterator(), false)
-                .filter(m -> m.getDate().getMonth().getValue()==month)
+        List<Message> list = getInbox(user).stream()
+                .filter(m -> m.getDate().getMonth().getValue() == month)
                 .collect(Collectors.toList());
         return new Tuple<>(user, list);
     }
 
-    public Tuple<User, List<Message>> reportUsersMessagesFriendMonth(Long id, Long idFriend,Integer month){
+    public Tuple<User, List<Message>> reportUsersMessagesFriendMonth(Long id, Long idFriend, Integer month){
         User user = usersRepo.findOne(id);
-        List<Message> list = StreamSupport.stream(getInbox(user).spliterator(), false)
-                .filter(m -> m.getDate().getMonth().getValue()==month)
-                .filter(m -> m.getFrom().getId()==idFriend)
+        List<Message> list = getInbox(user).stream()
+                .filter(m -> m.getDate().getMonth().getValue() == month)
+                .filter(m -> m.getFrom().getId().equals(idFriend))
                 .collect(Collectors.toList());
         return new Tuple<>(user, list);
     }
 
     public List<FriendRequest> getUserFriendRequests(Long id){
         return StreamSupport.stream(friendRequestsRepo.findAll().spliterator(), false)
-                .filter(fr -> fr.getTo().getId() == id)
+                .filter(fr -> fr.getTo().getId().equals(id))
                 .collect(Collectors.toList());
     }
 
     public User getUser(Long id){
         User user = usersRepo.findOne(id);
         StreamSupport.stream(getAllFriendships().spliterator(), false)
-                .filter(fr -> fr.getUser1().getId() == id || fr.getUser2().getId() == id)
+                .filter(fr -> fr.getUser1().getId().equals(id) || fr.getUser2().getId().equals(id))
                 .map(fr -> {
-                    if(fr.getUser1().getId() == id)
+                    if(fr.getUser1().getId().equals(id))
                         return fr.getUser2();
                     else
                         return fr.getUser1();
                 })
-                .forEach(u -> user.addFriend(u));
+                .forEach(user::addFriend);
         return user;
     }
 
@@ -243,23 +236,25 @@ public class Service implements Observable {
         FriendRequest temp = friendRequestsRepo.findOne(new Tuple<>(fr.getFrom(), fr.getTo()));
         if(temp != null)
             if(temp.getStatus().matches("rejected") ||
-                    (temp.getStatus().matches("approved") && friendshipsRepo.findOne(new Tuple<>(fr.getFrom(), fr.getTo())) == null)) {
-                FriendRequest f= friendRequestsRepo.update(fr);
+                    (temp.getStatus().matches("approved") &&
+                            friendshipsRepo.findOne(new Tuple<>(fr.getFrom(), fr.getTo())) == null)) {
+                FriendRequest f = friendRequestsRepo.update(fr);
                 this.update();
                 return f;
             }
             else
                 return null;
+
         temp = friendRequestsRepo.findOne(new Tuple<>(fr.getTo(), fr.getFrom()));
         if(temp != null)
             if(temp.getStatus().matches("rejected")) {
-                FriendRequest f= friendRequestsRepo.save(fr);
+                FriendRequest f = friendRequestsRepo.save(fr);
                 this.update();
                 return f;
             }
             else
                 return null;
-        FriendRequest f= friendRequestsRepo.save(fr);
+        FriendRequest f = friendRequestsRepo.save(fr);
         this.update();
         return f;
     }
@@ -267,7 +262,7 @@ public class Service implements Observable {
     public Friendship acceptFriendRequest(User to, User from){
         List<FriendRequest> requestList = getUserFriendRequests(to.getId())
                 .stream()
-                .filter(fr -> fr.getFrom().getId() == from.getId())
+                .filter(fr -> fr.getFrom().getId().equals(from.getId()))
                 .collect(Collectors.toList());
 
         if(requestList.isEmpty())
@@ -280,7 +275,7 @@ public class Service implements Observable {
         fr.setStatus("approved");
         friendRequestsRepo.update(fr);
 
-        Friendship f= addFriendship(to.getId(), from.getId());
+        Friendship f = addFriendship(to.getId(), from.getId());
         this.update();
         return f;
     }
@@ -288,7 +283,7 @@ public class Service implements Observable {
     public boolean rejectFriendRequest(User to, User from){
         List<FriendRequest> requestList = getUserFriendRequests(to.getId())
                 .stream()
-                .filter(fr -> fr.getFrom().getId() == from.getId())
+                .filter(fr -> fr.getFrom().getId().equals(from.getId()))
                 .collect(Collectors.toList());
 
         if(requestList.isEmpty())
@@ -306,56 +301,49 @@ public class Service implements Observable {
     }
 
     public List<Message> getChats(Long id1, Long id2) {
-        List<Message> list = new ArrayList<Message>();
+        List<Message> list = new ArrayList<>();
+
         for (Message m: messageRepository.findAll()) {
-            if(m.getFrom().getId()==id1)
-            {
-                for (User u: m.getTo()) {
-                    if(u.getId()==id2)
+            if(m.getFrom().getId().equals(id1))
+                for (User u: m.getTo())
+                    if(u.getId().equals(id2))
                         list.add(m);
-                }
-            }
-            if(m.getFrom().getId()==id2)
-            {
-                for (User u: m.getTo()) {
-                    if(u.getId()==id1)
+
+            if(m.getFrom().getId().equals(id2))
+                for (User u: m.getTo())
+                    if(u.getId().equals(id1))
                         list.add(m);
-                }
-            }
         }
         return  list;
     }
-    public List<Message> getChatsPagination(Long id1, Long id2,int t) {
-        List<Message> list = new ArrayList<Message>();
-        for (Message m: messageRepository.findAllPagination(t,id1,id2)) {
-            if(m.getFrom().getId()==id1)
-            {
-                for (User u: m.getTo()) {
-                    if(u.getId()==id2)
+
+    public List<Message> getChatsPagination(Long id1, Long id2, int t) {
+        List<Message> list = new ArrayList<>();
+
+        for (Message m: messageRepository.findAllPagination(t, id1, id2)) {
+            if(m.getFrom().getId().equals(id1))
+                for (User u: m.getTo())
+                    if(u.getId().equals(id2))
                         list.add(m);
-                }
-            }
-            if(m.getFrom().getId()==id2)
-            {
-                for (User u: m.getTo()) {
-                    if(u.getId()==id1)
+
+            if(m.getFrom().getId().equals(id2))
+                for (User u: m.getTo())
+                    if(u.getId().equals(id1))
                         list.add(m);
-                }
-            }
         }
         return  list;
     }
+
     public List<Message> getInbox(User user) {
-        List<Message> list = new ArrayList<Message>();
-        for (Message m: messageRepository.findAll()) {
+        List<Message> list = new ArrayList<>();
+
+        for (Message m: messageRepository.findAll())
             for(User to : m.getTo())
-                if(to.getId()==user.getId())
+                if(to.getId().equals(user.getId()))
                     list.add(m);
 
-        }
         return  list;
     }
-
 
     public void sendMessage(Message m){
         messageRepository.save(m);
@@ -363,13 +351,14 @@ public class Service implements Observable {
     }
 
     public void replyAll(Message m, User user, String reply) {
-        ArrayList<User> toList = new ArrayList<User>();
-        if(m.getFrom().getId() != user.getId())
+        ArrayList<User> toList = new ArrayList<>();
+
+        if(!m.getFrom().getId().equals(user.getId()))
             toList.add(m.getFrom());
         for(User u : m.getTo())
-            if(u.getId()!= user.getId())
+            if(!u.getId().equals(user.getId()))
                 toList.add(u);
-        Message message = new Message(user,toList,reply);
+        Message message = new Message(user, toList, reply);
         message.setReply(m);
         messageRepository.save(message);
         this.update();
@@ -381,14 +370,14 @@ public class Service implements Observable {
 
     public List<FriendRequest> getUserSentFriendRequests(Long id) {
         return StreamSupport.stream(friendRequestsRepo.findAll().spliterator(), false)
-                .filter(fr -> fr.getFrom().getId() == id)
+                .filter(fr -> fr.getFrom().getId().equals(id))
                 .collect(Collectors.toList());
     }
 
-    public FriendRequest removeFriendRequest(User from, User to) {
-        List<FriendRequest> requestList = getUserFriendRequests(to.getId())
+    public FriendRequest removeFriendRequest(User fromUser, User toUser) {
+        List<FriendRequest> requestList = getUserFriendRequests(toUser.getId())
                 .stream()
-                .filter(fr -> fr.getFrom().getId() == from.getId())
+                .filter(fr -> fr.getFrom().getId().equals(fromUser.getId()))
                 .collect(Collectors.toList());
 
         if(requestList.isEmpty())
@@ -398,7 +387,7 @@ public class Service implements Observable {
         if(!fr.getStatus().matches("pending"))
             return null;
 
-        fr=friendRequestsRepo.delete(new Tuple<User,User>(from,to));
+        fr = friendRequestsRepo.delete(new Tuple<>(fromUser, toUser));
         this.update();
         return fr;
     }
@@ -409,9 +398,9 @@ public class Service implements Observable {
 
     public Event addEvent(String name, LocalDate date){
         Event event = new Event(name, date);
-        Event event1 = eventRepository.save(event);
+        Event result = eventRepository.save(event);
         this.update();
-        return event1;
+        return result;
     }
 
     public Iterable<Event> findAllEvents(){
@@ -427,5 +416,4 @@ public class Service implements Observable {
         eventRepository.unsubscribe(eventId, userId);
         this.update();
     }
-
 }

@@ -12,10 +12,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.sql.DriverManager.getConnection;
 
 public class FriendshipDbRepository implements Repository<Tuple<User, User>, Friendship> {
-    private String url;
-    private String username;
-    private String password;
-    private Validator<Friendship> validator;
+    private final String url;
+    private final String username;
+    private final String password;
+    private final Validator<Friendship> validator;
 
     public FriendshipDbRepository(String url, String username, String password, Validator<Friendship> validator) {
         this.url = url;
@@ -28,17 +28,13 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
     public int size() {
         AtomicInteger n = new AtomicInteger();
         Iterable<Friendship> users = findAll();
-        users.forEach(x -> {
-            n.getAndIncrement();
-        });
+        users.forEach(x -> n.getAndIncrement());
         return n.get();
     }
 
     @Override
     public boolean exists(Tuple<User, User> t) {
-        if (findOne(t) != null)
-            return true;
-        return false;
+        return findOne(t) != null;
     }
 
     @Override
@@ -48,7 +44,7 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
 
     @Override
     public void saveAll(Iterable<Friendship> list) {
-        list.forEach(x -> save(x));
+        list.forEach(this::save);
     }
 
     @Override
@@ -57,18 +53,18 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
             throw new IllegalArgumentException("Tuple of users must not be null!");
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT * from friendships WHERE user1=? and user2=?")) {
+                     "SELECT * FROM friendships WHERE user1 = ? AND user2 = ?")) {
             statement.setLong(1, t.getLeft().getId());
             statement.setLong(2, t.getRight().getId());
             ResultSet resultSet = statement.executeQuery();
             Friendship friendship = null;
             while (resultSet.next()) {
-                Long idUser1 = resultSet.getLong("user1");
-                Long idUser2 = resultSet.getLong("user2");
+                long idUser1 = resultSet.getLong("user1");
+                long idUser2 = resultSet.getLong("user2");
                 Date date = resultSet.getDate("date");
                 User user1 = null;
                 User user2 = null;
-               try (PreparedStatement statement1 = connection.prepareStatement("SELECT * from users WHERE id=?")){
+                try (PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM users WHERE id = ?")){
                      statement1.setDouble(1, idUser1);
                      ResultSet resultSet1 = statement1.executeQuery();
                      while (resultSet1.next()) {
@@ -88,7 +84,7 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
                          user2.setId(id2);
                     }
                 } catch (SQLException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                     return null;
                 }
                 friendship = new Friendship(user1, user2);
@@ -96,7 +92,7 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
             }
             return friendship;
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
     }
@@ -105,17 +101,17 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
     public Iterable<Friendship> findAll() {
         ArrayList<Friendship> friendships = new ArrayList<>();
         try (Connection connection = getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * from friendships");
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM friendships");
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                Long idUser1 = resultSet.getLong("user1");
-                Long idUser2 = resultSet.getLong("user2");
+                long idUser1 = resultSet.getLong("user1");
+                long idUser2 = resultSet.getLong("user2");
                 Date date = resultSet.getDate("date");
                 User user1 = null;
                 User user2 = null;
-                Friendship friendship = null;
-                try (PreparedStatement statement1 = connection.prepareStatement("SELECT * from users WHERE id=?")) {
+                Friendship friendship;
+                try (PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM users WHERE id = ?")) {
                      statement1.setDouble(1, idUser1);
                      ResultSet resultSet1 = statement1.executeQuery();
                      while (resultSet1.next()) {
@@ -136,7 +132,7 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
                          user2.setId(id2);
                     }
                 } catch (SQLException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                     return null;
                 }
                 if (idUser1 < idUser2)
@@ -148,60 +144,59 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
 
         }
         return friendships;
-    } catch(
-    SQLException e)
-
-    {
+    } catch(SQLException e) {
         e.printStackTrace();
         return friendships;
     }
-
 }
 
     @Override
     public Friendship save(Friendship entity) {
-        String sql = "insert into friendships (user1, user2, date ) values (?, ?, ?)";
+        String sql = "INSERT INTO friendships (user1, user2, date ) VALUES (?, ?, ?)";
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             if(entity.getUser1().getId() < entity.getUser2().getId()){
-            ps.setLong(1, entity.getUser1().getId());
-            ps.setLong(2, entity.getUser2().getId());}
+                ps.setLong(1, entity.getUser1().getId());
+                ps.setLong(2, entity.getUser2().getId());
+            }
             else {
                 ps.setLong(2, entity.getUser1().getId());
-                ps.setLong(1, entity.getUser2().getId());}
+                ps.setLong(1, entity.getUser2().getId());
+            }
             ps.setDate(3, entity.getDate());
             ps.executeUpdate();
             return entity;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    public Friendship delete(Tuple<User, User> idd) {
-        String sql = "delete from friendships where user1 = ? and user2 =?";
-        Friendship p = findOne(idd);
+    public Friendship delete(Tuple<User, User> ids) {
+        String sql = "DELETE FROM friendships WHERE user1 = ? AND user2 = ?";
+        Friendship p = findOne(ids);
         try(Connection connection = getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement(sql)){
 
-            if(idd.getLeft().getId()<idd.getRight().getId()){
-                ps.setLong(1, idd.getLeft().getId());
-                ps.setLong(2, idd.getRight().getId());}
+            if(ids.getLeft().getId() < ids.getRight().getId()){
+                ps.setLong(1, ids.getLeft().getId());
+                ps.setLong(2, ids.getRight().getId());}
             else {
-                ps.setLong(2, idd.getLeft().getId());
-                ps.setLong(1, idd.getRight().getId());}
+                ps.setLong(2, ids.getLeft().getId());
+                ps.setLong(1, ids.getRight().getId());}
             ps.executeUpdate();
             return p;
-        } catch (SQLException throwables) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
-
     }
 
     @Override
     public Friendship update(Friendship entity) {
-        String sql = "update friendships set date = ? where user1 = ? and user2 = ? ";
+        String sql = "UPDATE friendships SET date = ? WHERE user1 = ? AND user2 = ? ";
         try(Connection connection = getConnection(url, username, password);
             PreparedStatement ps = connection.prepareStatement(sql)) {
             if(entity.getUser1().getId() < entity.getUser2().getId()){
@@ -209,11 +204,13 @@ public class FriendshipDbRepository implements Repository<Tuple<User, User>, Fri
                 ps.setLong(3, entity.getUser2().getId());}
             else {
                 ps.setLong(3, entity.getUser1().getId());
-                ps.setLong(2, entity.getUser2().getId());}
+                ps.setLong(2, entity.getUser2().getId());
+            }
             ps.setDate(1, entity.getDate());
             ps.executeUpdate();
             return entity;
         } catch (SQLException e){
+            e.printStackTrace();
             return null;
         }
     }

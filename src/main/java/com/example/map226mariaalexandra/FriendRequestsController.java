@@ -49,7 +49,6 @@ public class FriendRequestsController implements Observer {
         alert.showAndWait();
     }
 
-
     public void onApproveButtonClick(ActionEvent actionEvent) {
         if(tableView.getSelectionModel().getSelectedItem() == null){
             showAlert("Ops", "Please select a friend request!");
@@ -89,9 +88,9 @@ public class FriendRequestsController implements Observer {
         tableView.getItems().clear();
         List<FriendRequest> friendRequests = srv.getUserFriendRequests(user.getId());
 
-        userId.setCellValueFactory(new PropertyValueFactory<FriendRequestDTO, Long>("userId"));
-        name.setCellValueFactory(new PropertyValueFactory<FriendRequestDTO, String>("name"));
-        status.setCellValueFactory(new PropertyValueFactory<FriendRequestDTO, String>("status"));
+        userId.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        status.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         for(FriendRequest f : friendRequests)
             requests.add(new FriendRequestDTO(f.getFrom().getId(), f.getFrom().getFirstName() + " " + f.getFrom().getLastName(), f.getStatus()));
@@ -122,9 +121,7 @@ public class FriendRequestsController implements Observer {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-
     }
-
 
     @Override
     public void update() {
@@ -133,6 +130,5 @@ public class FriendRequestsController implements Observer {
         for(FriendRequest f : friendRequests)
             requests.add(new FriendRequestDTO(f.getFrom().getId(), f.getFrom().getFirstName() + " " + f.getFrom().getLastName(), f.getStatus()));
         this.srv.removeObserver(this);
-
     }
 }

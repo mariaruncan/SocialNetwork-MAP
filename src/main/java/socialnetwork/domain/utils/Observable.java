@@ -8,8 +8,8 @@ public interface Observable {
     List<Observer> observers = new ArrayList<>();
 
     default void update() {
-        for (int i=0;i< observers.size();i++) {
-            observers.get(i).update();
+        for (Observer observer : observers) {
+            observer.update();
         }
     }
 

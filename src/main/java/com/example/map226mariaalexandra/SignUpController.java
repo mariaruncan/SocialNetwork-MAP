@@ -67,7 +67,6 @@ public class SignUpController {
         }
         catch (ValidationException ex){
             showAlert("Ops", ex.getMessage());
-            return;
         }
     }
 

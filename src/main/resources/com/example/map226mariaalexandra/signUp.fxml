@@ -9,57 +9,59 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="383.0" prefWidth="300.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.SignUpController">
-   <children>
-      <ImageView fitHeight="187.0" fitWidth="191.0" layoutX="63.0" layoutY="-48.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../mint1.jpeg" />
-         </image>
-      </ImageView>
-      <Label contentDisplay="CENTER" layoutX="120.0" layoutY="82.0" prefHeight="66.0" prefWidth="112.0" text="Sign up" textFill="#f0eded">
-         <font>
-            <Font name="Century" size="30.0" />
-         </font>
-      </Label>
-      <Label layoutX="26.0" layoutY="221.0" prefHeight="22.0" prefWidth="72.0" text="Username" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Label layoutX="26.0" layoutY="258.0" text="Password" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <PasswordField fx:id="passwordField" layoutX="100.0" layoutY="254.0" prefHeight="26.0" prefWidth="176.0" promptText="4 characters or more" />
-      <Button layoutX="142.0" layoutY="326.0" mnemonicParsing="false" onAction="#createAccount" text="Sign up" textFill="#44734d">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Button>
-      <TextField fx:id="firstNameTextField" layoutX="100.0" layoutY="148.0" prefHeight="26.0" prefWidth="176.0" />
-      <TextField fx:id="lastNameTextField1" layoutX="100.0" layoutY="185.0" prefHeight="26.0" prefWidth="176.0" />
-      <TextField fx:id="usernameTextField" layoutX="100.0" layoutY="219.0" prefHeight="26.0" prefWidth="176.0" />
-      <PasswordField fx:id="repeatPasswordField" layoutX="100.0" layoutY="289.0" prefHeight="26.0" prefWidth="176.0" />
-      <Label layoutX="26.0" layoutY="150.0" prefHeight="22.0" prefWidth="72.0" text="First name" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Label layoutX="26.0" layoutY="187.0" prefHeight="22.0" prefWidth="72.0" text="Last name" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Label layoutX="27.0" layoutY="285.0" prefHeight="26.0" prefWidth="72.0" text="Repeat" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Label layoutX="27.0" layoutY="302.0" text="Password" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="383.0"
+            prefWidth="300.0" style="-fx-background-color: #45a583;" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.map226mariaalexandra.SignUpController">
+   <ImageView fitHeight="187.0" fitWidth="191.0" layoutX="63.0" layoutY="-48.0" pickOnBounds="true"
+              preserveRatio="true">
+      <Image url="@../../../mint1.jpeg"/>
+   </ImageView>
+   <Label contentDisplay="CENTER" layoutX="120.0" layoutY="82.0" prefHeight="66.0" prefWidth="112.0" text="Sign up"
+          textFill="#f0eded">
+      <font>
+         <Font name="Century" size="30.0"/>
+      </font>
+   </Label>
+   <Label layoutX="26.0" layoutY="221.0" prefHeight="22.0" prefWidth="72.0" text="Username" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <Label layoutX="26.0" layoutY="258.0" text="Password" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <PasswordField fx:id="passwordField" layoutX="100.0" layoutY="254.0" prefHeight="26.0" prefWidth="176.0"
+                  promptText="4 characters or more"/>
+   <Button layoutX="142.0" layoutY="326.0" mnemonicParsing="false" onAction="#createAccount" text="Sign up"
+           textFill="#44734d">
+      <font>
+         <Font name="System Bold" size="16.0"/>
+      </font>
+   </Button>
+   <TextField fx:id="firstNameTextField" layoutX="100.0" layoutY="148.0" prefHeight="26.0" prefWidth="176.0"/>
+   <TextField fx:id="lastNameTextField1" layoutX="100.0" layoutY="185.0" prefHeight="26.0" prefWidth="176.0"/>
+   <TextField fx:id="usernameTextField" layoutX="100.0" layoutY="219.0" prefHeight="26.0" prefWidth="176.0"/>
+   <PasswordField fx:id="repeatPasswordField" layoutX="100.0" layoutY="289.0" prefHeight="26.0" prefWidth="176.0"/>
+   <Label layoutX="26.0" layoutY="150.0" prefHeight="22.0" prefWidth="72.0" text="First name" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <Label layoutX="26.0" layoutY="187.0" prefHeight="22.0" prefWidth="72.0" text="Last name" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <Label layoutX="27.0" layoutY="285.0" prefHeight="26.0" prefWidth="72.0" text="Repeat" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <Label layoutX="27.0" layoutY="302.0" text="Password" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
 </AnchorPane>

@@ -102,13 +102,13 @@ public class User extends Entity<Long>{
      * @return string representing friends of user
      */
     private String friendsToString(){
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (User u: friends) {
-            if(!s.isEmpty())
-                s += ", ";
-            s = s + u.getFirstName() + " " + u.getLastName();
+            if(s.length() > 0)
+                s.append(", ");
+            s.append(u.getFirstName()).append(" ").append(u.getLastName());
         }
-        return s;
+        return s.toString();
     }
 
     /**
@@ -128,8 +128,7 @@ public class User extends Entity<Long>{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User that = (User) o;
+        if (!(o instanceof User that)) return false;
         return getFirstName().equals(that.getFirstName()) &&
                 getLastName().equals(that.getLastName()) &&
                 getFriends().equals(that.getFriends());
@@ -147,7 +146,7 @@ public class User extends Entity<Long>{
     public void setFriends(List<Friendship> friendships) {
         this.friends.clear();
         for(Friendship f : friendships)
-            if(f.getUser1().getId()==getId())
+            if(f.getUser1().getId().equals(getId()))
                 this.friends.add(f.getUser2());
             else this.friends.add(f.getUser1());
     }

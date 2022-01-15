@@ -59,7 +59,7 @@ public class MessagesWithUserController implements Observer {
     private User userLogged;
     private User userMessaged;
     private ObservableList<MessageDTO> messages;
-    private int t=1;//page number
+    private int t = 1;//page number
 
     public void setService(Service srv) {
         this.srv = srv;
@@ -83,12 +83,12 @@ public class MessagesWithUserController implements Observer {
     private void showMessages(int t){
         tableView.getItems().clear();
 
-        id.setCellValueFactory(new PropertyValueFactory<MessageDTO, Long>("id"));
-        from.setCellValueFactory(new PropertyValueFactory<MessageDTO, String>("from"));
-        to.setCellValueFactory(new PropertyValueFactory<MessageDTO, String>("to"));
-        text.setCellValueFactory(new PropertyValueFactory<MessageDTO, String>("text"));
-        date.setCellValueFactory(new PropertyValueFactory<MessageDTO, LocalDateTime>("date"));
-        reply.setCellValueFactory(new PropertyValueFactory<MessageDTO, String>("reply"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        from.setCellValueFactory(new PropertyValueFactory<>("from"));
+        to.setCellValueFactory(new PropertyValueFactory<>("to"));
+        text.setCellValueFactory(new PropertyValueFactory<>("text"));
+        date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        reply.setCellValueFactory(new PropertyValueFactory<>("reply"));
 
         for(Message m : srv.getChatsPagination(userLogged.getId(), userMessaged.getId(),t))
             messages.add(new MessageDTO(m));
@@ -99,12 +99,13 @@ public class MessagesWithUserController implements Observer {
     private void refreshTable(MouseEvent event){
         try {
             final List<Message> ms = srv.getChats(userLogged.getId(), userMessaged.getId());
-            for( int i = messages.size();i<ms.size();i++)
-                    this.messages.add(new MessageDTO(ms.get(i)));
+            for(Message m : ms)
+                this.messages.add(new MessageDTO(m));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public void setUserLogged(User user) {
         this.userLogged = user;
     }
@@ -119,23 +120,21 @@ public class MessagesWithUserController implements Observer {
             showAlert("Ops", "Please write message text!");
             return;
         }
-
         textField.setText("");
-
         List<User> toList = new ArrayList<>();
         toList.add(userMessaged);
         this.srv.addObserver(this);
         srv.sendMessage(new Message(userLogged, toList, text));
     }
+
     public void nextPage(ActionEvent actionEvent) {
         t++;
         showMessages(t);
-
     }
+
     public void previousPage(ActionEvent actionEvent) {
         t--;
         showMessages(t);
-
     }
 
     public void onButtonReplyClick(ActionEvent actionEvent) {
@@ -143,17 +142,14 @@ public class MessagesWithUserController implements Observer {
             showAlert("Ops", "Please select a message!");
             return;
         }
-
         String text = textField.getText();
         if(text.isEmpty()){
             showAlert("Ops", "Please write message text!");
             return;
         }
-
         textField.setText("");
 
         Long id = tableView.getSelectionModel().getSelectedItem().getId();
-
         List<User> toList = new ArrayList<>();
         toList.add(userMessaged);
         Message msg = new Message(userLogged, toList, text);
@@ -173,20 +169,16 @@ public class MessagesWithUserController implements Observer {
             showAlert("Ops", "Please write message text!");
             return;
         }
-
         textField.setText("");
-
         Long id = tableView.getSelectionModel().getSelectedItem().getId();
         Message msg = srv.getMessage(id);
         this.srv.addObserver(this);
         srv.replyAll(msg, userLogged, text);
-
     }
 
     public void switchSearchUsersPage(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("searchFriends.fxml"));
         root = loader.load();
-
         SearchFriendsController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(userLogged);
@@ -200,13 +192,10 @@ public class MessagesWithUserController implements Observer {
     public void update() {
         try {
             final List<Message> ms = srv.getChats(userLogged.getId(), userMessaged.getId());
-            this.messages
-                    .add(new MessageDTO(ms.get(ms.size() - 1)));
+            this.messages.add(new MessageDTO(ms.get(ms.size() - 1)));
             this.srv.removeObserver(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 }

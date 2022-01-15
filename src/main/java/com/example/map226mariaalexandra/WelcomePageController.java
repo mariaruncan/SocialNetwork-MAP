@@ -1,6 +1,5 @@
 package com.example.map226mariaalexandra;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -80,8 +79,8 @@ public class WelcomePageController implements Observer {
     @FXML
     public void showFriends(){
         tableFriends.getItems().clear();
-        friends.setCellValueFactory(new PropertyValueFactory<FriendDTO,String>("name"));
-        id.setCellValueFactory(new PropertyValueFactory<FriendDTO,Long>("id"));
+        friends.setCellValueFactory(new PropertyValueFactory<>("name"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
         for(User f : page.getFriends())
                 friendList.add(new FriendDTO(f.getId(),f.getFirstName() + " " + f.getLastName()));
         tableFriends.setItems(friendList);
@@ -90,8 +89,8 @@ public class WelcomePageController implements Observer {
     @FXML
     public void showInbox(){
         tableInbox.getItems().clear();
-        from.setCellValueFactory(new PropertyValueFactory<MessageDTO,String>("from"));
-        inbox.setCellValueFactory(new PropertyValueFactory<MessageDTO,String>("text"));
+        from.setCellValueFactory(new PropertyValueFactory<>("from"));
+        inbox.setCellValueFactory(new PropertyValueFactory<>("text"));
         for(Message m : page.getReceivedMessages())
                 messageList.add(new MessageDTO(m));
         tableInbox.setItems(messageList);
@@ -100,11 +99,11 @@ public class WelcomePageController implements Observer {
     @FXML
     public void showEvents(){
         tableEvents.getItems().clear();
-        eventName.setCellValueFactory(new PropertyValueFactory<EventDTO, String>("name"));
-        eventDate.setCellValueFactory(new PropertyValueFactory<EventDTO, LocalDate>("date"));
-        eventSub.setCellValueFactory(new PropertyValueFactory<EventDTO, Boolean>("subscribed"));
+        eventName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        eventDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        eventSub.setCellValueFactory(new PropertyValueFactory<>("subscribed"));
         for(Event e : page.getEventList()){
-            Boolean sub = false;
+            boolean sub = false;
             User us = e.getSubscribedUsers().stream()
                     .filter(x -> x.getId().equals(this.user.getId()))
                     .findAny()
@@ -170,29 +169,27 @@ public class WelcomePageController implements Observer {
             List<Message> messages = srv.reportUsersMessagesMonth(user.getId(),month).getRight();
 
             try (PDPageContentStream cont = new PDPageContentStream(doc, myPage)) {
-
                 cont.beginText();
-
                 cont.setFont(PDType1Font.TIMES_ROMAN, 12);
                 cont.setLeading(14.5f);
-
                 cont.newLineAtOffset(25, 700);
-                String line1 = "The user "+user.getFirstName()+" "+user.getLastName()+" made friends in the month "+
-                        String.valueOf(month)+ " :";
+                String line1 = "The user " + user.getFirstName() + " " + user.getLastName() + " made friends in the month "
+                        + month + " :";
                 cont.showText(line1);
                 cont.newLine();
                 for(User u : friends) {
-                    String line2 = u.getFirstName()+" "+u.getLastName()+";";
+                    String line2 = u.getFirstName() + " " + u.getLastName() + ";";
                     cont.showText(line2);
                 }
                 cont.newLine();
 
-                String line3 ="The user "+user.getFirstName()+" "+user.getLastName()+
-                        " received the following messages in the month "+ String.valueOf(month)+ " :";
+                String line3 = "The user " + user.getFirstName() + " " + user.getLastName() +
+                        " received the following messages in the month " + month + " :";
                 cont.showText(line3);
                 cont.newLine();
                 for(Message m : messages) {
-                    String line2 = m.getFrom().getFirstName()+" "+m.getFrom().getLastName()+": "+m.getText()+";";
+                    String line2 = m.getFrom().getFirstName() + " " + m.getFrom().getLastName() + ": " +
+                            m.getText() + ";";
                     cont.newLine();
                     cont.showText(line2);
                 }
@@ -238,8 +235,8 @@ public class WelcomePageController implements Observer {
         stage.show();
     }
 
-    public void setUser(User userr) {
-        this.user = userr;
+    public void setUser(User user) {
+        this.user = user;
         user.setFriends(srv.reportUserFriends(user.getId()));
         setPage();
         displayName();
@@ -251,19 +248,19 @@ public class WelcomePageController implements Observer {
     }
 
     public void notifyEvents(){
-        String message = "";
+        StringBuilder message = new StringBuilder();
         List<Event> upcomingEvents = page.getEventList().stream()
-                .filter(ev -> ev.getSubscribedUsers().stream().anyMatch(u -> u.getId() == this.user.getId()))
+                .filter(ev -> ev.getSubscribedUsers().stream().anyMatch(u -> u.getId().equals(this.user.getId())))
                 .collect(Collectors.toList());
 
-        message = "You have " + upcomingEvents.size() + " upcoming events.\n";
+        message = new StringBuilder("You have " + upcomingEvents.size() + " upcoming events.\n");
         for(Event ev : upcomingEvents){
-            message += ev.getName();
-            message += " - ";
-            message += ev.getDate();
-            message += "\n";
+            message.append(ev.getName());
+            message.append(" - ");
+            message.append(ev.getDate());
+            message.append("\n");
         }
-        showAlert("Events", message);
+        showAlert("Events", message.toString());
     }
 
     private void initReport(){
@@ -298,7 +295,7 @@ public class WelcomePageController implements Observer {
                 .collect(Collectors.toList()));
 
         for(Event e : page.getEventList()){
-            Boolean sub = false;
+            boolean sub = false;
             User us = e.getSubscribedUsers().stream()
                     .filter(x -> x.getId().equals(this.user.getId()))
                     .findAny()

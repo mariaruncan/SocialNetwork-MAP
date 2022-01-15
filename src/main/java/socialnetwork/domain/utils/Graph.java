@@ -6,9 +6,9 @@ import java.util.*;
  * Graph class
  */
 public class Graph {
-    private int V; // No. of vertices in graph.
+    private final int V; // No. of vertices in graph.
 
-    private LinkedList<Integer>[] adj; // Adjacency List
+    private final LinkedList<Integer>[] adj; // Adjacency List
     // representation
 
     ArrayList<ArrayList<Integer> > components

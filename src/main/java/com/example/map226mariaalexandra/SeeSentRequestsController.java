@@ -100,7 +100,7 @@ public class SeeSentRequestsController implements Observer {
     public void switchWelcomePage(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(SocialNetworkApplication.class.getResource("welcomePage.fxml"));
-        root=loader.load();
+        root = loader.load();
         WelcomePageController controller = loader.getController();
         controller.setService(srv);
         controller.setUser(user);
@@ -108,7 +108,6 @@ public class SeeSentRequestsController implements Observer {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-
     }
 
 
